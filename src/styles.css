@@ -270,6 +270,58 @@ svg {
   text-underline-offset: 3px;
 }
 
+.switch-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 6px;
+  color: var(--ink-2);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.switch-row[hidden] {
+  display: none;
+}
+
+.switch-row input {
+  appearance: none;
+  flex: none;
+  position: relative;
+  width: 30px;
+  height: 18px;
+  margin: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 18%, transparent);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.switch-row input::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s;
+}
+
+.switch-row input:checked {
+  background: var(--accent);
+}
+
+.switch-row input:checked::after {
+  transform: translateX(12px);
+}
+
+.switch-row input:disabled {
+  opacity: 0.6;
+}
+
 /* ------------------------------------------------------------ desk */
 
 .desk {
@@ -945,6 +997,52 @@ dialog {
   padding: 24px 26px 20px;
   box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.5);
   user-select: text;
+}
+
+dialog {
+  max-height: 88vh;
+  overflow: auto;
+}
+
+.link-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 8px 0 4px;
+}
+
+.link-grid.wide {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.link-tile {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.link-tile:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.link-tile strong {
+  font-size: 13px;
+}
+
+.link-tile span {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 dialog::backdrop {

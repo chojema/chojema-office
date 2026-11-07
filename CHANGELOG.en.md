@@ -5,6 +5,11 @@ versions follow [Semantic Versioning](https://semver.org/). Korean (primary): [C
 
 ## [Unreleased]
 
+### Added
+
+- "Open at sign-in" setting (bottom left, off by default; Windows startup apps, macOS login items)
+- The "About & links" dialog links to the GitHub repository, Chojema App Park and the maker's blog, YouTube, X, Instagram, GitHub and homepage
+
 ## [0.1.0] - 2026-11-07
 
 First public release.

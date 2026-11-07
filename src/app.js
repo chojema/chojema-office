@@ -517,6 +517,19 @@ function runPalette(id) {
 
 // ---------------------------------------------------------------- about
 
+const MAKER_LINKS = [
+  ['link.blog', 'https://cantips.com', 'cantips.com'],
+  ['link.youtube', 'https://www.youtube.com/@cantips', '@cantips'],
+  ['link.x', 'https://twitter.com/chojema', '@chojema'],
+  ['link.instagram', 'https://www.instagram.com/chojema', '@chojema'],
+  ['link.github', 'https://github.com/chojema', 'chojema'],
+  ['link.home', 'http://ilovemis.com/', 'ilovemis.com'],
+];
+
+function linkTile(label, url, sub) {
+  return `<button type="button" class="link-tile" data-url="${esc(url)}"><strong>${esc(label)}</strong><span>${esc(sub)}</span></button>`;
+}
+
 function openAbout() {
   $('#about-body').innerHTML = `
     <div class="about-head">
@@ -525,11 +538,19 @@ function openAbout() {
     </div>
     <p>${esc(t('about.lead'))}</p>
     <p><strong>${esc(t('about.author'))}</strong><br>${esc(t('about.license'))}</p>
+    <h3>${esc(t('about.links'))}</h3>
+    <div class="link-grid wide">
+      ${linkTile(t('about.repo'), 'https://github.com/chojema/chojema-office', 'github.com/chojema/chojema-office')}
+      ${linkTile(t('about.appPark'), 'https://chojema.github.io/AppPark/', t('about.appParkText'))}
+    </div>
+    <h3>${esc(t('about.maker'))} · Chulwoo Park</h3>
+    <div class="link-grid">
+      ${MAKER_LINKS.map(([key, url, sub]) => linkTile(t(key), url, sub)).join('')}
+    </div>
     <h3>${esc(t('about.partners'))}</h3>
     <p>${esc(t('about.partnersText'))}</p>
     <p class="muted">${esc(t('about.inspired'))}</p>
-    <p class="muted">${esc(t('about.data'))}</p>
-    <p><button type="button" class="link-button" data-url="https://github.com/chojema/chojema-office">github.com/chojema/chojema-office</button></p>`;
+    <p class="muted">${esc(t('about.data'))}</p>`;
   $('#about').showModal();
 }
 
@@ -544,6 +565,30 @@ function applyLanguage() {
   setLanguage(choice === 'auto' ? detectLanguage() : choice);
   applyStatic();
   if (state.env) $('#app-version').textContent = `v${state.env.version}`;
+}
+
+async function loadAutostart() {
+  try {
+    $('#autostart').checked = await invoke('autostart_enabled');
+    $('#autostart-row').hidden = false;
+  } catch (e) {
+    console.warn('autostart unavailable', e);
+  }
+}
+
+async function changeAutostart(e) {
+  const box = e.target;
+  const want = box.checked;
+  box.disabled = true;
+  try {
+    box.checked = await invoke('set_autostart', { enabled: want });
+    toast(t(box.checked ? 'toast.autostartOn' : 'toast.autostartOff'), 'info');
+  } catch (err) {
+    box.checked = !want;
+    toast(errorText(err), 'error');
+  } finally {
+    box.disabled = false;
+  }
 }
 
 // ---------------------------------------------------------------- wiring
@@ -606,6 +651,7 @@ function wire() {
   $('#update-all').addEventListener('click', updateAll);
   $('#palette-open').addEventListener('click', openPalette);
   $('#about-open').addEventListener('click', openAbout);
+  $('#autostart').addEventListener('change', changeAutostart);
   $('#self-update-notes').addEventListener('click', () => {
     state.sheetId = 'chojema-office';
     renderSheet();
@@ -690,6 +736,7 @@ async function start() {
   }
   $('#app-version').textContent = `v${state.env.version}`;
   if (!state.env.can_install) toast(t('unsupported.os'), 'warn', 8000);
+  loadAutostart();
   try {
     state.releases = await invoke('cached_releases');
   } catch {

@@ -243,14 +243,32 @@ async fn launch_app(id: String) -> Result<()> {
     install::launch(&path)
 }
 
-/// Opens a web page in the default browser. Only GitHub pages of the suite's repositories.
+/// Whether Chojema Office starts when the user signs in to the computer.
+#[tauri::command]
+fn autostart_enabled(app: AppHandle) -> Result<bool> {
+    use tauri_plugin_autostart::ManagerExt;
+    app.autolaunch().is_enabled().map_err(|e| Error::Io(e.to_string()))
+}
+
+#[tauri::command]
+fn set_autostart(app: AppHandle, enabled: bool) -> Result<bool> {
+    use tauri_plugin_autostart::ManagerExt;
+    let launcher = app.autolaunch();
+    let result = if enabled { launcher.enable() } else { launcher.disable() };
+    result.map_err(|e| Error::Io(e.to_string()))?;
+    launcher.is_enabled().map_err(|e| Error::Io(e.to_string()))
+}
+
+/// Opens a web page in the default browser. Only GitHub pages of the suite's repositories and
+/// the maker's own pages listed in [`catalog::ABOUT_LINKS`].
 #[tauri::command]
 fn open_external(app: AppHandle, url: String) -> Result<()> {
-    let allowed = SUITE.iter().chain(std::iter::once(&SELF_APP)).any(|a| {
-        let base = format!("{}/", a.repo_url()).to_ascii_lowercase();
-        let lower = url.to_ascii_lowercase();
-        lower == a.repo_url().to_ascii_lowercase() || lower.starts_with(&base)
-    });
+    let lower = url.to_ascii_lowercase();
+    let allowed = catalog::ABOUT_LINKS.iter().any(|l| lower == l.to_ascii_lowercase())
+        || SUITE.iter().chain(std::iter::once(&SELF_APP)).any(|a| {
+            let base = format!("{}/", a.repo_url()).to_ascii_lowercase();
+            lower == a.repo_url().to_ascii_lowercase() || lower.starts_with(&base)
+        });
     if !allowed {
         return Err(Error::Unsupported);
     }
@@ -261,6 +279,7 @@ fn open_external(app: AppHandle, url: String) -> Result<()> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, None))
         .setup(|app| {
             let cache = app.path().app_cache_dir().unwrap_or_else(|_| std::env::temp_dir().join("chojema-office"));
             let client = github::client()?;
@@ -280,7 +299,9 @@ pub fn run() {
             install_app,
             update_self,
             launch_app,
-            open_external
+            open_external,
+            autostart_enabled,
+            set_autostart
         ])
         .run(tauri::generate_context!())
         .expect("error while running Chojema Office");

@@ -179,6 +179,18 @@ pub const SELF_APP: AppEntry = AppEntry {
     mac_bundles: &["Chojema Office"],
 };
 
+/// Web pages the About dialog links to, besides the suite's GitHub repositories. Opened only
+/// when the URL matches one of these exactly.
+pub const ABOUT_LINKS: [&str; 7] = [
+    "https://chojema.github.io/AppPark/",
+    "https://cantips.com",
+    "https://www.youtube.com/@cantips",
+    "https://twitter.com/chojema",
+    "https://www.instagram.com/chojema",
+    "https://github.com/chojema",
+    "http://ilovemis.com/",
+];
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -194,6 +206,13 @@ mod tests {
         }
         assert!(AppEntry::by_id("chojema-office").is_some());
         assert!(AppEntry::by_id("nope").is_none());
+    }
+
+    #[test]
+    fn about_links_are_web_pages() {
+        for link in ABOUT_LINKS {
+            assert!(link.starts_with("https://") || link.starts_with("http://"), "{link}");
+        }
     }
 
     #[test]
