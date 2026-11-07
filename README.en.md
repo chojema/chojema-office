@@ -131,6 +131,18 @@ git tag v0.2.0 && git push origin main v0.2.0   # GitHub Actions builds the inst
 npm run release:publish -- 0.2.0    # publishes the release (Korean and English notes, checksums)
 ```
 
+GitHub Actions builds the Windows installer only. The macOS build is made by hand on a Mac and added to the same release:
+
+```sh
+# on a Mac
+rustup target add aarch64-apple-darwin x86_64-apple-darwin
+npm ci && npx tauri build --target universal-apple-darwin
+cp "src-tauri/target/universal-apple-darwin/release/bundle/dmg/"*.dmg ChojemaOffice-0.2.0-macos-universal.dmg
+gh release download v0.2.0 -p SHA256SUMS.txt --clobber
+shasum -a 256 ChojemaOffice-0.2.0-macos-universal.dmg >> SHA256SUMS.txt
+gh release upload v0.2.0 ChojemaOffice-0.2.0-macos-universal.dmg SHA256SUMS.txt --clobber
+```
+
 ## Build from source
 
 You need [Rust](https://rustup.rs) 1.80 or newer and [Node.js](https://nodejs.org) 20 or newer; on Windows, WebView2

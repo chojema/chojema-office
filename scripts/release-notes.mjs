@@ -37,7 +37,7 @@ ${ko}
 | 시스템 | 파일 |
 |---|---|
 | Windows 10/11 (x64) | \`ChojemaOffice-${version}-windows-x64-setup.exe\` |
-| macOS 11 이상 (Apple 실리콘·Intel) | \`ChojemaOffice-${version}-macos-universal.dmg\` |
+| macOS 11 이상 (Apple 실리콘·Intel) | \`ChojemaOffice-${version}-macos-universal.dmg\` (별도 빌드, 준비되는 대로 추가) |
 
 \`SHA256SUMS.txt\`로 내려받은 파일을 확인할 수 있습니다. 설치 파일에는 아직 코드 서명이 없어서 처음 실행할 때
 Windows SmartScreen이나 macOS Gatekeeper 경고가 나올 수 있습니다. 자세한 안내는 [README](https://github.com/chojema/chojema-office#readme)를 보세요.
@@ -53,7 +53,7 @@ ${en}
 | System | File |
 |---|---|
 | Windows 10/11 (x64) | \`ChojemaOffice-${version}-windows-x64-setup.exe\` |
-| macOS 11 or later (Apple silicon and Intel) | \`ChojemaOffice-${version}-macos-universal.dmg\` |
+| macOS 11 or later (Apple silicon and Intel) | \`ChojemaOffice-${version}-macos-universal.dmg\` (built separately, added when ready) |
 
 Check downloads against \`SHA256SUMS.txt\`. The installers are not code-signed yet, so Windows SmartScreen or macOS
 Gatekeeper may warn on first launch. See the [English README](https://github.com/chojema/chojema-office/blob/main/README.en.md).

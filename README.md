@@ -130,6 +130,18 @@ git tag v0.2.0 && git push origin main v0.2.0   # GitHub Actions가 설치 파�
 npm run release:publish -- 0.2.0    # 빌드가 끝나면 릴리스 게시(한국어·영어 노트, 체크섬 포함)
 ```
 
+GitHub Actions는 Windows 설치 파일만 만듭니다. macOS 빌드는 Mac에서 직접 만들어 같은 릴리스에 추가합니다.
+
+```sh
+# Mac에서
+rustup target add aarch64-apple-darwin x86_64-apple-darwin
+npm ci && npx tauri build --target universal-apple-darwin
+cp "src-tauri/target/universal-apple-darwin/release/bundle/dmg/"*.dmg ChojemaOffice-0.2.0-macos-universal.dmg
+gh release download v0.2.0 -p SHA256SUMS.txt --clobber
+shasum -a 256 ChojemaOffice-0.2.0-macos-universal.dmg >> SHA256SUMS.txt
+gh release upload v0.2.0 ChojemaOffice-0.2.0-macos-universal.dmg SHA256SUMS.txt --clobber
+```
+
 ## 소스에서 빌드
 
 필요한 것: [Rust](https://rustup.rs) 1.80 이상, [Node.js](https://nodejs.org) 20 이상, Windows에서는 WebView2(Windows 11에 기본 포함),
