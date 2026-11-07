@@ -5,6 +5,18 @@ versions follow [Semantic Versioning](https://semver.org/). Korean (primary): [C
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-07
+
+### Fixed
+
+- Hitting the GitHub request limit silently showed old information; a notice now says so and when you can check again
+- Chojema Office notices and installs its own new version even when the request limit is used up (it reads the latest tag from the GitHub release page)
+- On macOS, "Update and restart" only opened the disk image; it now replaces the app and reopens it
+
+### Changed
+
+- The automatic check at start-up does not ask again about apps checked in the last 10 minutes, to save requests ("Refresh" always checks)
+
 ## [0.2.0] - 2026-11-07
 
 ### Added
@@ -38,6 +50,7 @@ First public release.
 - Korean (default) and English interface; light, dark or system theme
 - Update notice and installer for Chojema Office itself
 
-[Unreleased]: https://github.com/chojema/chojema-office/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/chojema/chojema-office/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/chojema/chojema-office/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/chojema/chojema-office/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/chojema/chojema-office/releases/tag/v0.1.0

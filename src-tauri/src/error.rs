@@ -8,8 +8,9 @@ pub enum Error {
     Network(String),
     #[error("GitHub answered HTTP {0}")]
     Http(u16),
+    /// The anonymous GitHub API limit is used up; carries the reset time (Unix seconds).
     #[error("GitHub rate limit reached")]
-    RateLimited,
+    RateLimited(Option<u64>),
     #[error("no published release")]
     NoRelease,
     #[error("unknown app")]
@@ -38,7 +39,7 @@ impl Error {
         match self {
             Error::Network(_) => "network",
             Error::Http(_) => "http",
-            Error::RateLimited => "rate_limited",
+            Error::RateLimited(_) => "rate_limited",
             Error::NoRelease => "no_release",
             Error::UnknownApp => "unknown_app",
             Error::NoAsset => "no_asset",
@@ -68,9 +69,11 @@ impl From<std::io::Error> for Error {
 impl Serialize for Error {
     fn serialize<S: serde::Serializer>(&self, s: S) -> std::result::Result<S::Ok, S::Error> {
         use serde::ser::SerializeStruct;
-        let mut st = s.serialize_struct("Error", 2)?;
+        let mut st = s.serialize_struct("Error", 3)?;
         st.serialize_field("code", self.code())?;
         st.serialize_field("detail", &self.to_string())?;
+        let reset = if let Error::RateLimited(r) = self { *r } else { None };
+        st.serialize_field("reset", &reset)?;
         st.end()
     }
 }

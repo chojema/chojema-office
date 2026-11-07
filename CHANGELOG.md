@@ -5,6 +5,18 @@
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-07
+
+### 고침
+
+- GitHub 요청 한도에 걸리면 아무 표시 없이 지난 정보를 보여 주던 문제: 이제 안내와 함께 다시 확인할 수 있는 시각을 보여 줍니다
+- 요청 한도에 걸려도 Chojema Office 자체의 새 버전을 알아차리고 업데이트할 수 있습니다(GitHub 릴리스 페이지에서 최신 태그 확인)
+- macOS에서 「업데이트하고 다시 시작」이 디스크 이미지만 열던 문제: 이제 앱을 직접 교체하고 다시 실행합니다
+
+### 변경
+
+- 시작할 때의 자동 확인은 최근 10분 안에 확인한 앱을 다시 묻지 않아 요청 한도를 아낍니다(「새로 고침」은 항상 새로 확인)
+
 ## [0.2.0] - 2026-11-07
 
 ### 추가
@@ -38,6 +50,7 @@
 - 한국어(기본)와 영어 화면, 밝은 테마·어두운 테마·시스템 설정 따르기
 - Chojema Office 자체 업데이트 알림과 설치
 
-[Unreleased]: https://github.com/chojema/chojema-office/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/chojema/chojema-office/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/chojema/chojema-office/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/chojema/chojema-office/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/chojema/chojema-office/releases/tag/v0.1.0

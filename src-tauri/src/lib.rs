@@ -59,12 +59,25 @@ struct ReleaseView {
     has_checksums: bool,
 }
 
+/// A cached release shown because GitHub could not be asked (rate limit), with the time the limit
+/// resets so the interface can say when a fresh check is possible.
+#[derive(Serialize)]
+struct StaleView {
+    #[serde(flatten)]
+    view: ReleaseView,
+    reset: Option<u64>,
+}
+
 #[derive(Serialize)]
 #[serde(tag = "state", rename_all = "lowercase")]
 enum ReleaseResult {
     Ok(ReleaseView),
+    Stale(StaleView),
     Error { error: Error },
 }
+
+/// The automatic check at start-up skips apps GitHub confirmed this recently. "Refresh" always asks.
+const AUTO_RECHECK_SECS: u64 = 10 * 60;
 
 #[derive(Serialize)]
 struct InstallOutcome {
@@ -74,7 +87,8 @@ struct InstallOutcome {
 
 fn view(release: Release, platform: Platform) -> ReleaseView {
     let asset = platform::pick_asset(release.assets.iter().map(|a| a.name.as_str()), platform).map(str::to_string);
-    let asset_size = asset.as_ref().and_then(|n| release.assets.iter().find(|a| &a.name == n)).map(|a| a.size);
+    let asset_size =
+        asset.as_ref().and_then(|n| release.assets.iter().find(|a| &a.name == n)).map(|a| a.size).filter(|s| *s > 0);
     let has_checksums = release.assets.iter().any(|a| a.name.to_ascii_lowercase().starts_with("sha256sums"));
     let version = platform::parse_version(&release.tag).map(|v| v.to_string()).unwrap_or_else(|| release.tag.clone());
     ReleaseView { release, version, asset, asset_size, has_checksums }
@@ -121,44 +135,81 @@ async fn cached_releases(state: State<'_, AppState>) -> Result<HashMap<&'static 
         .collect())
 }
 
-/// Latest releases of every app and of Chojema Office itself, fetched in parallel.
+/// Latest releases of every app and of Chojema Office itself, fetched in parallel. Without `force`,
+/// apps confirmed in the last few minutes are answered from the cache.
 #[tauri::command]
-async fn refresh_releases(state: State<'_, AppState>) -> Result<HashMap<&'static str, ReleaseResult>> {
+async fn refresh_releases(
+    state: State<'_, AppState>,
+    force: Option<bool>,
+) -> Result<HashMap<&'static str, ReleaseResult>> {
     let platform = Platform::current();
+    let force = force.unwrap_or(true);
     let apps: Vec<&'static AppEntry> = SUITE.iter().chain(std::iter::once(&SELF_APP)).collect();
-    let previous: Vec<_> = {
+    let mut out = HashMap::new();
+    let mut to_fetch = Vec::new();
+    {
         let releases = state.releases.lock().await;
-        apps.iter().map(|a| releases.entry(a.repo)).collect()
-    };
-    let tasks: Vec<_> = apps
-        .iter()
-        .zip(previous)
+        for app in &apps {
+            match releases.recent(app.repo, AUTO_RECHECK_SECS).filter(|_| !force) {
+                Some(r) => {
+                    out.insert(app.id, ReleaseResult::Ok(view(r, platform)));
+                }
+                None => to_fetch.push((*app, releases.entry(app.repo))),
+            }
+        }
+    }
+    let tasks: Vec<_> = to_fetch
+        .into_iter()
         .map(|(app, prev)| {
             let client = state.client.clone();
             let repo = app.repo;
-            tauri::async_runtime::spawn(async move { github::fetch_latest(&client, repo, prev).await })
+            (app, tauri::async_runtime::spawn(async move { github::fetch_latest(&client, repo, prev).await }))
         })
         .collect();
 
-    let mut out = HashMap::new();
-    let mut fresh = Vec::new();
-    for (app, task) in apps.iter().zip(tasks) {
+    let mut releases = state.releases.lock().await;
+    for (app, task) in tasks {
         let result = task.await.map_err(|e| Error::Io(e.to_string()))?;
         let entry = match result {
             Ok((release, etag)) => {
-                fresh.push((app.repo, etag, release.clone()));
+                releases.store(app.repo, etag, release.clone());
                 ReleaseResult::Ok(view(release, platform))
             }
+            Err(error) if app.id == SELF_APP.id => self_fallback(&mut releases, error, platform).await,
+            Err(Error::RateLimited(reset)) => match releases.cached(app.repo) {
+                Some(r) => ReleaseResult::Stale(StaleView { view: view(r, platform), reset }),
+                None => ReleaseResult::Error { error: Error::RateLimited(reset) },
+            },
             Err(error) => ReleaseResult::Error { error },
         };
         out.insert(app.id, entry);
     }
-    let mut releases = state.releases.lock().await;
-    for (repo, etag, release) in fresh {
-        releases.store(repo, etag, release);
-    }
     releases.save();
     Ok(out)
+}
+
+/// Chojema Office must notice its own updates even when the API is unavailable, so its check falls
+/// back to the release page redirect, which gives the latest tag without using the API limit.
+async fn self_fallback(releases: &mut Releases, error: Error, platform: Platform) -> ReleaseResult {
+    let cached = releases.cached(SELF_APP.repo);
+    let tag = match github::latest_tag_from_web(SELF_APP.repo).await {
+        Ok(tag) => tag,
+        Err(_) => {
+            return match (error, cached) {
+                (Error::RateLimited(reset), Some(r)) => {
+                    ReleaseResult::Stale(StaleView { view: view(r, platform), reset })
+                }
+                (error, _) => ReleaseResult::Error { error },
+            }
+        }
+    };
+    // Same tag as the cache: the cached release (with its notes) is confirmed current.
+    let release = match cached {
+        Some(r) if r.tag == tag => r,
+        _ => github::self_release_for_tag(SELF_APP.repo, &tag),
+    };
+    releases.store(SELF_APP.repo, None, release.clone());
+    ReleaseResult::Ok(view(release, platform))
 }
 
 struct BusyGuard<'a> {
@@ -230,6 +281,15 @@ async fn update_self(app: AppHandle, state: State<'_, AppState>) -> Result<()> {
     };
     let dir = state.downloads.join(SELF_APP.id);
     let (path, _) = install::download(&state.client, &release, &asset, &dir, emit).await?;
+    emit("install", 0, 0);
+    // macOS: the new app is copied next to this one now and swapped in after this process exits,
+    // then reopened. Windows: the installer replaces the program and offers to start it.
+    #[cfg(target_os = "macos")]
+    {
+        install::stage_self_update(&path).await?;
+        let _ = tokio::fs::remove_file(&path).await;
+    }
+    #[cfg(not(target_os = "macos"))]
     install::spawn_installer(&path)?;
     app.exit(0);
     Ok(())

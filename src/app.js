@@ -307,7 +307,7 @@ function renderSheet() {
     </div>
     <dl class="facts">${facts.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${v}</dd></div>`).join('')}</dl>
     ${err && !rel ? `<p class="sheet-error">${esc(errorText(err))}</p>` : ''}
-    ${rel ? `<section class="notes"><h3>${esc(t('action.notes'))} · ${esc(rel.name)}</h3><div class="md">${renderMarkdown(rel.body)}</div></section>` : ''}
+    ${rel?.body ? `<section class="notes"><h3>${esc(t('action.notes'))} · ${esc(rel.name)}</h3><div class="md">${renderMarkdown(rel.body)}</div></section>` : ''}
   `;
   sheet.classList.add('open');
   sheet.setAttribute('aria-hidden', 'false');
@@ -352,24 +352,35 @@ async function loadInstalled() {
   }
 }
 
-async function refresh() {
+// `force` asks GitHub about every app; the automatic check at start-up reuses answers from the
+// last few minutes so repeated launches stay under the anonymous API limit.
+async function refresh(force = true) {
   state.loading = true;
   render();
   await loadInstalled();
   render();
   let failures = 0;
   let rateLimited = false;
+  let resetAt = 0;
   try {
-    const results = await invoke('refresh_releases');
+    const results = await invoke('refresh_releases', { force });
     for (const [id, r] of Object.entries(results)) {
-      if (r.state === 'ok') {
-        const { state: _s, ...view } = r;
+      if (r.state === 'ok' || r.state === 'stale') {
+        const { state: s, reset, ...view } = r;
         state.releases[id] = view;
         delete state.errors[id];
+        if (s === 'stale') {
+          failures += 1;
+          rateLimited = true;
+          resetAt = Math.max(resetAt, reset || 0);
+        }
       } else {
         state.errors[id] = r.error;
         if (r.error?.code !== 'no_release') failures += 1;
-        if (r.error?.code === 'rate_limited') rateLimited = true;
+        if (r.error?.code === 'rate_limited') {
+          rateLimited = true;
+          resetAt = Math.max(resetAt, r.error.reset || 0);
+        }
       }
     }
   } catch (e) {
@@ -377,9 +388,12 @@ async function refresh() {
     console.error(e);
   }
   state.loading = false;
-  const offline = $('#offline');
-  offline.hidden = failures === 0;
-  $('#offline-text').textContent = rateLimited ? t('offline.rate') : t('offline.text');
+  $('#offline').hidden = failures === 0;
+  $('#offline-text').textContent = !rateLimited
+    ? t('offline.text')
+    : resetAt
+      ? t('offline.rateUntil', { time: new Date(resetAt * 1000).toLocaleTimeString(locale(), { hour: 'numeric', minute: '2-digit' }) })
+      : t('offline.rate');
   render();
 }
 
@@ -782,7 +796,7 @@ async function start() {
     state.releases = {};
   }
   render();
-  await refresh();
+  await refresh(false);
 }
 
 start();

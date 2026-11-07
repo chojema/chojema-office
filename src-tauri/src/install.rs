@@ -139,12 +139,28 @@ pub async fn run_installer(path: &Path, silent: bool) -> Result<()> {
 /// not writable) and unmounts it.
 #[cfg(target_os = "macos")]
 pub async fn run_installer(path: &Path, _silent: bool) -> Result<()> {
+    let system = PathBuf::from("/Applications");
+    let dest_dir = if is_writable(&system) {
+        system
+    } else {
+        let home = std::env::var_os("HOME").map(PathBuf::from).ok_or(Error::Unsupported)?;
+        let d = home.join("Applications");
+        tokio::fs::create_dir_all(&d).await?;
+        d
+    };
+    copy_app_from_dmg(path, |name| dest_dir.join(name)).await.map(|_| ())
+}
+
+/// Mounts `dmg`, copies the `.app` inside to `dest(app name)` (replacing what is there) and
+/// unmounts. Returns the copied path.
+#[cfg(target_os = "macos")]
+async fn copy_app_from_dmg(dmg: &Path, dest: impl FnOnce(&std::ffi::OsStr) -> PathBuf) -> Result<PathBuf> {
     use tokio::process::Command;
     let mount = std::env::temp_dir().join(format!("chojema-office-{}", std::process::id()));
     let _ = tokio::fs::create_dir_all(&mount).await;
     let st = Command::new("hdiutil")
         .arg("attach")
-        .arg(path)
+        .arg(dmg)
         .args(["-nobrowse", "-readonly", "-noautoopen", "-mountpoint"])
         .arg(&mount)
         .status()
@@ -162,23 +178,13 @@ pub async fn run_installer(path: &Path, _silent: bool) -> Result<()> {
             }
         }
         let app = app.ok_or(Error::NoAsset)?;
-        let name = app.file_name().ok_or(Error::NoAsset)?.to_owned();
-        let system = PathBuf::from("/Applications");
-        let dest_dir = if is_writable(&system) {
-            system
-        } else {
-            let home = std::env::var_os("HOME").map(PathBuf::from).ok_or(Error::Unsupported)?;
-            let d = home.join("Applications");
-            tokio::fs::create_dir_all(&d).await?;
-            d
-        };
-        let dest = dest_dir.join(name);
+        let dest = dest(app.file_name().ok_or(Error::NoAsset)?);
         if dest.exists() {
             let _ = tokio::fs::remove_dir_all(&dest).await;
         }
         let st = Command::new("ditto").arg(&app).arg(&dest).status().await?;
         if st.success() {
-            Ok(())
+            Ok(dest)
         } else {
             Err(Error::InstallerFailed(st.code().unwrap_or(-1)))
         }
@@ -187,6 +193,75 @@ pub async fn run_installer(path: &Path, _silent: bool) -> Result<()> {
     let _ = Command::new("hdiutil").arg("detach").arg(&mount).arg("-quiet").status().await;
     let _ = tokio::fs::remove_dir(&mount).await;
     result
+}
+
+/// Prepares Chojema Office's own update: copies the new app next to the running one, then starts a
+/// small detached script that waits for this process to exit, swaps the bundles (restoring the old
+/// one if the swap fails) and reopens the app. The caller exits right after.
+///
+/// When the running copy cannot be replaced in place (read-only disk image, App Translocation, a
+/// folder without write access) the new version is installed into Applications instead.
+#[cfg(target_os = "macos")]
+pub async fn stage_self_update(dmg: &Path) -> Result<()> {
+    let exe = std::env::current_exe()?;
+    let bundle = exe
+        .ancestors()
+        .find(|p| p.extension().is_some_and(|x| x == "app"))
+        .map(Path::to_path_buf)
+        .ok_or(Error::Unsupported)?;
+    let parent = bundle.parent().ok_or(Error::Unsupported)?.to_path_buf();
+    let in_place = is_writable(&parent)
+        && !bundle.to_string_lossy().contains("/AppTranslocation/")
+        && !bundle.starts_with("/Volumes");
+
+    if !in_place {
+        run_installer(dmg, true).await?;
+        let name = bundle.file_name().ok_or(Error::Unsupported)?;
+        let installed = [
+            PathBuf::from("/Applications"),
+            PathBuf::from(std::env::var_os("HOME").unwrap_or_default()).join("Applications"),
+        ]
+        .into_iter()
+        .map(|d| d.join(name))
+        .find(|p| p.exists())
+        .ok_or(Error::NotInstalled)?;
+        return relaunch_after_exit(&installed, None);
+    }
+
+    let name = bundle.file_name().ok_or(Error::Unsupported)?.to_string_lossy().into_owned();
+    let staged = parent.join(format!(".{name}.update"));
+    copy_app_from_dmg(dmg, |_| staged.clone()).await?;
+    relaunch_after_exit(&bundle, Some(&staged))
+}
+
+/// Spawns the detached helper: wait for this process, optionally move `staged` over `bundle`
+/// (keeping a backup until the move succeeds), then open `bundle`.
+#[cfg(target_os = "macos")]
+fn relaunch_after_exit(bundle: &Path, staged: Option<&Path>) -> Result<()> {
+    const SCRIPT: &str = r#"
+while kill -0 "$1" 2>/dev/null; do sleep 0.2; done
+if [ -n "$3" ]; then
+  backup="$2.previous"
+  rm -rf "$backup"
+  if mv "$2" "$backup"; then
+    if mv "$3" "$2"; then rm -rf "$backup"; else mv "$backup" "$2"; rm -rf "$3"; fi
+  fi
+fi
+open "$2"
+"#;
+    let staged = staged.map(|p| p.as_os_str().to_owned()).unwrap_or_default();
+    std::process::Command::new("/bin/sh")
+        .arg("-c")
+        .arg(SCRIPT)
+        .arg("chojema-office-update")
+        .arg(std::process::id().to_string())
+        .arg(bundle)
+        .arg(staged)
+        .stdin(std::process::Stdio::null())
+        .stdout(std::process::Stdio::null())
+        .stderr(std::process::Stdio::null())
+        .spawn()?;
+    Ok(())
 }
 
 #[cfg(target_os = "macos")]
@@ -207,6 +282,7 @@ pub async fn run_installer(_path: &Path, _silent: bool) -> Result<()> {
 }
 
 /// Starts an installer without waiting (used for Chojema Office's own update, which then quits).
+#[cfg_attr(target_os = "macos", allow(dead_code))]
 pub fn spawn_installer(path: &Path) -> Result<()> {
     #[cfg(windows)]
     {
