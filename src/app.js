@@ -132,6 +132,7 @@ function countFor(key) {
 const DRAWER_ICONS = {
   all: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M10 7h4"/>',
   docs: '<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',
+  sheets: '<rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M3 9h18M3 14h18M9 4v16M15 4v16"/>',
   slides: '<rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8M7 12l3-3 2 2 4-4"/>',
   pdf: '<path d="M6 3h9l4 4v14H6z"/><path d="M9 13h2a1.5 1.5 0 0 0 0-3H9v6M15 10v6M15 10h2.5M15 13h2"/>',
   media: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4 18 5-5 3 3 3-3 5 5"/>',

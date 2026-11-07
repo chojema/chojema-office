@@ -5,8 +5,8 @@
 <h1 align="center">Chojema Office</h1>
 
 <p align="center">
-  <b>Install, update and open your writing, presentation, PDF and image apps from one window.</b><br>
-  Chojema Dooroo · WordCraft · DeckCraft · PdfCraft · Chojema Editor · Chojema Image+ · Chojema KeyStamp
+  <b>Install, update and open your writing, spreadsheet, presentation, PDF and image apps from one window.</b><br>
+  Chojema Dooroo · WordCraft · GridCraft · DeckCraft · PdfCraft · Chojema Editor · Chojema Image+ · Chojema KeyStamp
 </p>
 
 <p align="center">
@@ -31,7 +31,7 @@
 
 ## What it does
 
-No more hunting through seven release pages. Chojema Office gathers seven office apps in one place: it shows which
+No more hunting through eight release pages. Chojema Office gathers eight office apps in one place: it shows which
 ones you have and which version, installs the right build for your computer, and tells you when an update is out.
 
 ## The apps
@@ -41,6 +41,7 @@ ones you have and which version, installs the right build for your computer, and
 | Writing | [Chojema Dooroo](https://github.com/chojema/ChojemaDooroo) | Desktop word processor for HWP and HWPX documents | Chulwoo Park |
 | Writing | [WordCraft](https://github.com/storytold/wordcraft) | Word processing for DOCX documents | ArtCraft Team (partner app) |
 | Writing | [Chojema Editor](https://github.com/chojema/chojema-editor) | Text editor with WYSIWYG Markdown and HTML editing | Chulwoo Park |
+| Spreadsheets | [GridCraft](https://github.com/storytold/gridcraft) | Spreadsheets for XLSX workbooks | ArtCraft Team (partner app) |
 | Presenting | [DeckCraft](https://github.com/storytold/deckcraft) | Presentations and slide shows | ArtCraft Team (partner app) |
 | PDF | [PdfCraft](https://github.com/storytold/pdfcraft) | Read, edit, organize and protect PDFs | ArtCraft Team (partner app) |
 | Images & tools | [Chojema Image+](https://github.com/chojema/ChojemaImagePlus) | Lightweight, fast image viewer | Chulwoo Park |
@@ -55,7 +56,7 @@ downloads each app's official installer, unchanged, from that app's GitHub relea
   <tr>
     <td width="33%" valign="top">
       <h3>🗂️ Organized in drawers</h3>
-      Browse by drawer (Writing, Presenting, PDF, Images & tools) or by state (Installed, Updates, Not installed). Each folder card shows the installed and latest version side by side.
+      Browse by drawer (Writing, Spreadsheets, Presenting, PDF, Images & tools) or by state (Installed, Updates, Not installed). Each folder card shows the installed and latest version side by side.
     </td>
     <td width="33%" valign="top">
       <h3>⬇️ Verified installs</h3>
@@ -134,5 +135,5 @@ Layout:
 
 Chojema Office is licensed under the [Apache License 2.0](LICENSE).
 
-- WordCraft, DeckCraft and PdfCraft are apps by the ArtCraft Team (MIT or Apache-2.0); their app icons are used unmodified from their repositories.
+- WordCraft, GridCraft, DeckCraft and PdfCraft are apps by the ArtCraft Team (MIT or Apache-2.0); their app icons are used unmodified from their repositories.
 - Per-file credits: [ATTRIBUTION.md](ATTRIBUTION.md) · [NOTICE](NOTICE)

@@ -14,6 +14,11 @@ export const APP_META = {
     drawer: 'docs',
     tagline: { ko: 'DOCX 문서 작성과 편집', en: 'Word processing for DOCX documents' },
   },
+  gridcraft: {
+    color: '#1e8e5a',
+    drawer: 'sheets',
+    tagline: { ko: 'XLSX 스프레드시트 작성과 계산', en: 'Spreadsheets for XLSX workbooks' },
+  },
   editor: {
     color: '#5b4bdb',
     drawer: 'docs',
@@ -44,7 +49,7 @@ export const APP_META = {
   },
 };
 
-export const DRAWERS = ['all', 'docs', 'slides', 'pdf', 'media'];
+export const DRAWERS = ['all', 'docs', 'sheets', 'slides', 'pdf', 'media'];
 export const VIEWS = ['installed', 'updates', 'missing'];
 
 const ko = {
@@ -52,6 +57,7 @@ const ko = {
   'nav.views': '살펴보기',
   'drawer.all': '모든 앱',
   'drawer.docs': '문서 작성',
+  'drawer.sheets': '스프레드시트',
   'drawer.slides': '발표',
   'drawer.pdf': 'PDF',
   'drawer.media': '이미지 도구',
@@ -138,7 +144,7 @@ const ko = {
   'about.author': '만든 이: Chulwoo Park',
   'about.license': 'Apache License 2.0으로 배포합니다.',
   'about.partners': '외부 앱',
-  'about.partnersText': 'WordCraft, DeckCraft, PdfCraft는 ArtCraft Team이 만든 오픈 소스 앱입니다(MIT 또는 Apache-2.0). Chojema Office는 각 앱의 공식 GitHub 릴리스를 그대로 내려받아 설치하며, 앱 아이콘은 원 저장소의 파일을 수정 없이 사용합니다.',
+  'about.partnersText': 'WordCraft, GridCraft, DeckCraft, PdfCraft는 ArtCraft Team이 만든 오픈 소스 앱입니다(MIT 또는 Apache-2.0). Chojema Office는 각 앱의 공식 GitHub 릴리스를 그대로 내려받아 설치하며, 앱 아이콘은 원 저장소의 파일을 수정 없이 사용합니다.',
   'about.inspired': '앱 목록을 한곳에서 관리하는 런처라는 착상은 ArtCraft Launcher(storytold/craft-launcher, MIT 또는 Apache-2.0)에서 얻었습니다. 코드와 디자인은 새로 작성했습니다.',
   'about.data': '앱 버전 정보는 GitHub 공개 API에서 가져오며, 그 밖의 정보는 어디에도 보내지 않습니다.',
   'bytes.mb': '{n} MB',
@@ -149,6 +155,7 @@ const en = {
   'nav.views': 'Browse',
   'drawer.all': 'All apps',
   'drawer.docs': 'Writing',
+  'drawer.sheets': 'Spreadsheets',
   'drawer.slides': 'Presenting',
   'drawer.pdf': 'PDF',
   'drawer.media': 'Images & tools',
@@ -235,7 +242,7 @@ const en = {
   'about.author': 'Made by Chulwoo Park',
   'about.license': 'Distributed under the Apache License 2.0.',
   'about.partners': 'Partner apps',
-  'about.partnersText': 'WordCraft, DeckCraft and PdfCraft are open-source apps by the ArtCraft Team (MIT or Apache-2.0). Chojema Office downloads and installs their official GitHub releases unchanged, and shows their app icons unmodified from their repositories.',
+  'about.partnersText': 'WordCraft, GridCraft, DeckCraft and PdfCraft are open-source apps by the ArtCraft Team (MIT or Apache-2.0). Chojema Office downloads and installs their official GitHub releases unchanged, and shows their app icons unmodified from their repositories.',
   'about.inspired': 'The idea of one launcher for a suite of apps comes from ArtCraft Launcher (storytold/craft-launcher, MIT or Apache-2.0). The code and design here are new.',
   'about.data': 'App versions come from the public GitHub API; nothing else is sent anywhere.',
   'bytes.mb': '{n} MB',

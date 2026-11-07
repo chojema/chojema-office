@@ -11,6 +11,7 @@ The code and original assets of Chojema Office are by Chulwoo Park and licensed 
 | 파일 · File | 앱 · App | 만든 이 · Author | 원본 · Source | 라이선스 · License |
 |---|---|---|---|---|
 | `wordcraft.png` | WordCraft | ArtCraft Team and the WordCraft contributors | [`storytold/wordcraft`](https://github.com/storytold/wordcraft) `assets/app-icon/hicolor/256x256/apps/ai.storyteller.wordcraft.png`, 수정 없이 복사 · copied unmodified | MIT OR Apache-2.0 |
+| `gridcraft.png` | GridCraft | ArtCraft Team and the GridCraft contributors | [`storytold/gridcraft`](https://github.com/storytold/gridcraft) `assets/app-icon/hicolor/256x256/apps/ai.storyteller.gridcraft.png`, 수정 없이 복사 · copied unmodified | MIT OR Apache-2.0 |
 | `deckcraft.png` | DeckCraft | ArtCraft Team and the DeckCraft contributors | [`storytold/deckcraft`](https://github.com/storytold/deckcraft) `assets/app-icon/hicolor/256x256/apps/ai.storyteller.deckcraft.png`, 수정 없이 복사 · copied unmodified | MIT OR Apache-2.0 |
 | `pdfcraft.png` | PdfCraft | ArtCraft Team and the PdfCraft contributors | [`storytold/pdfcraft`](https://github.com/storytold/pdfcraft) `assets/app-icon/hicolor/256x256/apps/ai.storyteller.pdfcraft.png`, 수정 없이 복사 · copied unmodified | MIT OR Apache-2.0 |
 | `dooroo.png` | Chojema Dooroo | Chulwoo Park | [`chojema/ChojemaDooroo`](https://github.com/chojema/ChojemaDooroo) `apps/desktop/build/icon.png`, 256 px로 축소 · resized | Apache-2.0 |
@@ -18,8 +19,8 @@ The code and original assets of Chojema Office are by Chulwoo Park and licensed 
 | `imageplus.png` | Chojema Image+ | Chulwoo Park | [`chojema/ChojemaImagePlus`](https://github.com/chojema/ChojemaImagePlus) `src-tauri/icons/128x128@2x.png` | MIT |
 | `keystamp.png` | Chojema KeyStamp | Chulwoo Park | [`chojema/chojema-keystamp`](https://github.com/chojema/chojema-keystamp) `src-tauri/icons/128x128@2x.png` | Chulwoo Park |
 
-WordCraft, DeckCraft, PdfCraft, ArtCraft라는 이름은 각 소유자의 것이며, 해당 앱을 알아보게 하는 용도로만 씁니다.
-The names WordCraft, DeckCraft, PdfCraft and ArtCraft belong to their owners and are used only to identify those apps.
+WordCraft, GridCraft, DeckCraft, PdfCraft, ArtCraft라는 이름은 각 소유자의 것이며, 해당 앱을 알아보게 하는 용도로만 씁니다.
+The names WordCraft, GridCraft, DeckCraft, PdfCraft and ArtCraft belong to their owners and are used only to identify those apps.
 
 ## 외부 앱 · Partner apps
 
@@ -32,6 +33,7 @@ from that app's own GitHub release page. Each app's license and terms are those 
 | 앱 · App | 만든 이 · Author | 저장소 · Repository | 라이선스 · License |
 |---|---|---|---|
 | WordCraft | ArtCraft Team | <https://github.com/storytold/wordcraft> | MIT OR Apache-2.0 |
+| GridCraft | ArtCraft Team | <https://github.com/storytold/gridcraft> | MIT OR Apache-2.0 |
 | DeckCraft | ArtCraft Team | <https://github.com/storytold/deckcraft> | MIT OR Apache-2.0 |
 | PdfCraft | ArtCraft Team | <https://github.com/storytold/pdfcraft> | MIT OR Apache-2.0 |
 

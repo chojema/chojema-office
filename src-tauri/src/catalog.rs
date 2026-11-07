@@ -61,7 +61,7 @@ impl AppEntry {
 }
 
 /// The suite, in display order.
-pub const SUITE: [AppEntry; 7] = [
+pub const SUITE: [AppEntry; 8] = [
     AppEntry {
         id: "dooroo",
         name: "Chojema Dooroo",
@@ -87,6 +87,19 @@ pub const SUITE: [AppEntry; 7] = [
             folders: &["WordCraft", "ArtCraft\\WordCraft"],
         },
         mac_bundles: &["WordCraft"],
+    },
+    AppEntry {
+        id: "gridcraft",
+        name: "GridCraft",
+        repo: "storytold/gridcraft",
+        publisher: "ArtCraft Team",
+        maker: Maker::Partner,
+        windows: WinProbe {
+            display_names: &["GridCraft"],
+            exe: "gridcraft.exe",
+            folders: &["GridCraft", "ArtCraft\\GridCraft"],
+        },
+        mac_bundles: &["GridCraft"],
     },
     AppEntry {
         id: "deckcraft",

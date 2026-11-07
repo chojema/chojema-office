@@ -11,12 +11,12 @@ First public release.
 
 ### Added
 
-- Manage Chojema Dooroo, WordCraft, DeckCraft, PdfCraft, Chojema Editor, Chojema Image+ and Chojema KeyStamp from one window
+- Manage Chojema Dooroo, WordCraft, GridCraft, DeckCraft, PdfCraft, Chojema Editor, Chojema Image+ and Chojema KeyStamp from one window
 - Latest GitHub release of each app (ETag cache to stay under the rate limit; last known data when offline)
 - Detects installed apps and their versions (Windows registry, macOS Applications folders)
 - Picks the installer for this computer's OS and CPU, verifies its SHA-256 checksum, then installs or updates
 - "Update all" for every app with an update
-- Drawers (Writing, Presenting, PDF, Images & tools) and views (Installed, Updates, Not installed)
+- Drawers (Writing, Spreadsheets, Presenting, PDF, Images & tools) and views (Installed, Updates, Not installed)
 - Details panel: versions, file to download, integrity check, install location and release notes
 - `Ctrl K` quick-launch palette to find, open or install an app
 - Korean (default) and English interface; light, dark or system theme

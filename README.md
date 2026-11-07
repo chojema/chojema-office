@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>문서 작성, 발표, PDF, 이미지 앱을 한 창에서 설치하고, 업데이트하고, 엽니다.</b><br>
-  Chojema Dooroo · WordCraft · DeckCraft · PdfCraft · Chojema Editor · Chojema Image+ · Chojema KeyStamp
+  Chojema Dooroo · WordCraft · GridCraft · DeckCraft · PdfCraft · Chojema Editor · Chojema Image+ · Chojema KeyStamp
 </p>
 
 <p align="center">
@@ -31,7 +31,7 @@
 
 ## 무엇을 하나요
 
-앱마다 따로 릴리스 페이지를 찾아다니지 않아도 됩니다. Chojema Office는 사무용 앱 일곱 가지를 한곳에 모아,
+앱마다 따로 릴리스 페이지를 찾아다니지 않아도 됩니다. Chojema Office는 사무용 앱 여덟 가지를 한곳에 모아,
 어떤 앱이 설치돼 있고 어떤 버전인지 보여 주고, 이 컴퓨터에 맞는 설치 파일을 골라 설치하며, 새 버전이 나오면 알려 줍니다.
 
 ## 포함된 앱
@@ -41,6 +41,7 @@
 | 문서 작성 | [Chojema Dooroo](https://github.com/chojema/ChojemaDooroo) | HWP·HWPX 문서를 위한 데스크톱 워드 프로세서 | Chulwoo Park |
 | 문서 작성 | [WordCraft](https://github.com/storytold/wordcraft) | DOCX 문서 작성과 편집 | ArtCraft Team(외부 앱) |
 | 문서 작성 | [Chojema Editor](https://github.com/chojema/chojema-editor) | 마크다운·HTML 위지윅 편집을 지원하는 텍스트 편집기 | Chulwoo Park |
+| 스프레드시트 | [GridCraft](https://github.com/storytold/gridcraft) | XLSX 스프레드시트 작성과 계산 | ArtCraft Team(외부 앱) |
 | 발표 | [DeckCraft](https://github.com/storytold/deckcraft) | 프레젠테이션과 슬라이드 쇼 | ArtCraft Team(외부 앱) |
 | PDF | [PdfCraft](https://github.com/storytold/pdfcraft) | PDF 읽기·편집·정리·보호 | ArtCraft Team(외부 앱) |
 | 이미지 도구 | [Chojema Image+](https://github.com/chojema/ChojemaImagePlus) | 가볍고 빠른 이미지 뷰어 | Chulwoo Park |
@@ -55,7 +56,7 @@
   <tr>
     <td width="33%" valign="top">
       <h3>🗂️ 서랍처럼 정리</h3>
-      문서 작성·발표·PDF·이미지 도구 서랍과 설치됨·업데이트·미설치 보기로 앱을 나눠 봅니다. 서류철 모양 카드에 설치 버전과 최신 버전이 나란히 나옵니다.
+      문서 작성·스프레드시트·발표·PDF·이미지 도구 서랍과 설치됨·업데이트·미설치 보기로 앱을 나눠 봅니다. 서류철 모양 카드에 설치 버전과 최신 버전이 나란히 나옵니다.
     </td>
     <td width="33%" valign="top">
       <h3>⬇️ 확인하고 설치</h3>
@@ -133,5 +134,5 @@ cd src-tauri && cargo test   # 단위 테스트
 
 Chojema Office는 [Apache License 2.0](LICENSE)으로 배포합니다.
 
-- WordCraft, DeckCraft, PdfCraft는 ArtCraft Team의 앱(MIT 또는 Apache-2.0)이며, 앱 아이콘은 각 저장소의 파일을 수정 없이 사용합니다.
+- WordCraft, GridCraft, DeckCraft, PdfCraft는 ArtCraft Team의 앱(MIT 또는 Apache-2.0)이며, 앱 아이콘은 각 저장소의 파일을 수정 없이 사용합니다.
 - 파일별 출처: [ATTRIBUTION.md](ATTRIBUTION.md) · [NOTICE](NOTICE)
