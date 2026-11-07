@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ko" data-theme="auto">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chojema Office</title>
+  <link rel="icon" href="favicon.png">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail" aria-label="navigation">
+      <div class="brand">
+        <img src="favicon.png" alt="" width="40" height="40">
+        <div>
+          <strong>Chojema Office</strong>
+          <span id="app-version" class="mono"></span>
+        </div>
+      </div>
+
+      <nav class="drawers" id="drawers" aria-labelledby="drawers-title">
+        <h2 id="drawers-title" data-i18n="nav.drawers"></h2>
+        <!-- filled by app.js -->
+      </nav>
+
+      <nav class="drawers" id="views" aria-labelledby="views-title">
+        <h2 id="views-title" data-i18n="nav.views"></h2>
+      </nav>
+
+      <div class="rail-foot">
+        <div class="segmented" role="group" data-i18n-aria="settings.language">
+          <button type="button" data-lang="ko">한국어</button>
+          <button type="button" data-lang="en">English</button>
+        </div>
+        <div class="segmented" role="group" data-i18n-aria="settings.theme">
+          <button type="button" data-theme-choice="auto" data-i18n="theme.auto"></button>
+          <button type="button" data-theme-choice="light" data-i18n="theme.light"></button>
+          <button type="button" data-theme-choice="dark" data-i18n="theme.dark"></button>
+        </div>
+        <button type="button" class="link-button" id="about-open" data-i18n="about.open"></button>
+      </div>
+    </aside>
+
+    <main class="desk">
+      <header class="desk-head">
+        <div class="greeting">
+          <p class="date" id="today"></p>
+          <h1 id="greeting"></h1>
+          <p class="summary" id="summary"></p>
+        </div>
+        <div class="head-actions">
+          <button type="button" class="search-trigger" id="palette-open">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span data-i18n="palette.trigger"></span>
+            <kbd>Ctrl K</kbd>
+          </button>
+          <button type="button" class="btn quiet" id="refresh">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
+            <span data-i18n="action.refresh"></span>
+          </button>
+          <button type="button" class="btn primary" id="update-all" hidden>
+            <span data-i18n="action.updateAll"></span>
+            <span class="count" id="update-count"></span>
+          </button>
+        </div>
+      </header>
+
+      <div class="notice" id="self-update" hidden>
+        <img src="favicon.png" alt="" width="28" height="28">
+        <p id="self-update-text"></p>
+        <button type="button" class="btn quiet" id="self-update-notes" data-i18n="action.notes"></button>
+        <button type="button" class="btn primary" id="self-update-run" data-i18n="action.updateSelf"></button>
+      </div>
+
+      <div class="notice warn" id="offline" hidden>
+        <p id="offline-text"></p>
+      </div>
+
+      <section class="cabinet" id="cabinet" aria-live="polite"></section>
+      <p class="empty" id="empty" hidden></p>
+    </main>
+  </div>
+
+  <aside class="sheet" id="sheet" aria-hidden="true">
+    <div class="sheet-scrim" data-close-sheet></div>
+    <div class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <button type="button" class="icon-button sheet-close" data-close-sheet data-i18n-aria="action.close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div id="sheet-body"></div>
+    </div>
+  </aside>
+
+  <div class="palette" id="palette" hidden>
+    <div class="palette-scrim" data-close-palette></div>
+    <div class="palette-box" role="dialog" aria-modal="true" data-i18n-aria="palette.title">
+      <input id="palette-input" type="search" autocomplete="off" spellcheck="false">
+      <ul id="palette-list" role="listbox"></ul>
+      <p class="palette-hint" data-i18n="palette.hint"></p>
+    </div>
+  </div>
+
+  <dialog id="about">
+    <div id="about-body"></div>
+    <form method="dialog"><button class="btn primary" data-i18n="action.close"></button></form>
+  </dialog>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+</body>
+</html>

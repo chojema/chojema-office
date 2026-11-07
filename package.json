@@ -1,0 +1,20 @@
+{
+  "name": "chojema-office",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Chojema Office: one place to install, update and open the Chojema Office apps",
+  "author": "Chulwoo Park",
+  "license": "Apache-2.0",
+  "repository": "github:chojema/chojema-office",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "icons": "tauri icon assets/brand/chojema-office.svg -o src-tauri/icons",
+    "version:set": "node scripts/set-version.mjs",
+    "release-notes": "node scripts/release-notes.mjs",
+    "release:publish": "node scripts/publish-release.mjs"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}

@@ -1,0 +1,23 @@
+Chojema Office
+Copyright (c) 2026 Chulwoo Park
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Third-party material
+--------------------
+This repository includes material made by other people under their own licenses.
+The per-file list (author, source, license) is in ATTRIBUTION.md.
+
+- WordCraft, DeckCraft and PdfCraft app icons (src/app-icons/wordcraft.png, deckcraft.png,
+  pdfcraft.png), copied unmodified from github.com/storytold/wordcraft, storytold/deckcraft
+  and storytold/pdfcraft. Copyright (c) 2026 ArtCraft Team and the respective app contributors.
+  Licensed under the MIT License or the Apache License 2.0, at your option.
+  The names WordCraft, DeckCraft, PdfCraft and ArtCraft belong to their owners and are used
+  only to identify those apps.
+
+Chojema Office does not bundle the partner apps themselves. It downloads their official
+release files from their own GitHub release pages when the user asks it to.
+
+The idea of a single launcher for a suite of apps was inspired by ArtCraft Launcher
+(github.com/storytold/craft-launcher, MIT OR Apache-2.0). No code, design or assets from
+that project are included here.

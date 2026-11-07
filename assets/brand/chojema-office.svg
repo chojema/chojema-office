@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d5c63"/>
+      <stop offset="1" stop-color="#0d2b31"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffaf0"/>
+      <stop offset="1" stop-color="#efe6d4"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#04161a" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <rect x="64" y="64" width="896" height="896" rx="210" fill="url(#bg)"/>
+  <!-- back folder: amber -->
+  <g filter="url(#shadow)" transform="rotate(-10 512 560)">
+    <path d="M250 330 h170 a24 24 0 0 1 20 11 l26 39 h268 a36 36 0 0 1 36 36 v330 a36 36 0 0 1 -36 36 H250 a36 36 0 0 1 -36 -36 V366 a36 36 0 0 1 36 -36z" fill="#f2a93b"/>
+  </g>
+  <!-- middle folder: coral -->
+  <g filter="url(#shadow)" transform="rotate(4 512 560)">
+    <path d="M262 368 h170 a24 24 0 0 1 20 11 l26 39 h268 a36 36 0 0 1 36 36 v330 a36 36 0 0 1 -36 36 H262 a36 36 0 0 1 -36 -36 V404 a36 36 0 0 1 36 -36z" fill="#e8604c"/>
+  </g>
+  <!-- front sheet -->
+  <g filter="url(#shadow)">
+    <rect x="236" y="440" width="552" height="380" rx="40" fill="url(#paper)"/>
+    <rect x="300" y="520" width="230" height="34" rx="17" fill="#1d5c63"/>
+    <rect x="300" y="590" width="424" height="24" rx="12" fill="#c9bea9"/>
+    <rect x="300" y="642" width="360" height="24" rx="12" fill="#c9bea9"/>
+    <rect x="300" y="694" width="270" height="24" rx="12" fill="#c9bea9"/>
+    <circle cx="700" cy="537" r="34" fill="#f2a93b"/>
+  </g>
+</svg>

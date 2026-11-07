@@ -1,0 +1,14 @@
+# Build output
+/src-tauri/target/
+/src-tauri/gen/
+/node_modules/
+/dist/
+/out/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.log

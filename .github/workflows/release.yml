@@ -1,0 +1,100 @@
+name: Release
+
+# Push a tag such as v0.2.0 (or v1.0.0-beta.1 for a pre-release) to build the installers.
+# Then publish with: npm run release:publish -- 0.2.0
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: v
+        name: Tag matches Cargo.toml
+        shell: bash
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          cargo_version=$(grep -m1 '^version' src-tauri/Cargo.toml | sed -E 's/.*"(.*)"/\1/')
+          if [ "$tag" != "$cargo_version" ]; then
+            echo "Tag v$tag does not match Cargo.toml version $cargo_version" >&2
+            exit 1
+          fi
+          echo "version=$tag" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: check
+    name: Build (${{ matrix.name }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows-x64
+            os: windows-latest
+            targets: ''
+            args: ''
+          - name: macos-universal
+            os: macos-latest
+            targets: 'aarch64-apple-darwin,x86_64-apple-darwin'
+            args: '--target universal-apple-darwin'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.targets }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Build
+        run: npx tauri build ${{ matrix.args }}
+      - name: Collect
+        shell: bash
+        run: |
+          v="${{ needs.check.outputs.version }}"
+          mkdir -p out
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            cp src-tauri/target/release/bundle/nsis/*.exe "out/ChojemaOffice-$v-windows-x64-setup.exe"
+          else
+            cp src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg "out/ChojemaOffice-$v-macos-universal.dmg"
+          fi
+          ls -la out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: out/*
+          if-no-files-found: error
+
+  bundle:
+    # Collects the installers, checksums and notes into one artifact. The GitHub release itself
+    # is published from the maintainer's account with `npm run release:publish -- <version>`.
+    needs: [check, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Checksums and notes
+        run: |
+          (cd dist && sha256sum * > SHA256SUMS.txt && cat SHA256SUMS.txt)
+          node scripts/release-notes.mjs "${{ needs.check.outputs.version }}" > dist/RELEASE_NOTES.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-v${{ needs.check.outputs.version }}
+          path: dist/*
+          if-no-files-found: error

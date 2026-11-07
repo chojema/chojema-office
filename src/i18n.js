@@ -1,0 +1,273 @@
+// Interface text in Korean (default) and English.
+
+export const APP_META = {
+  dooroo: {
+    color: '#2563eb',
+    drawer: 'docs',
+    tagline: {
+      ko: 'HWP·HWPX 문서를 위한 데스크톱 워드 프로세서',
+      en: 'Desktop word processor for HWP and HWPX documents',
+    },
+  },
+  wordcraft: {
+    color: '#3e5bdb',
+    drawer: 'docs',
+    tagline: { ko: 'DOCX 문서 작성과 편집', en: 'Word processing for DOCX documents' },
+  },
+  editor: {
+    color: '#5b4bdb',
+    drawer: 'docs',
+    tagline: {
+      ko: '마크다운·HTML 위지윅 편집을 지원하는 텍스트 편집기',
+      en: 'Text editor with WYSIWYG Markdown and HTML editing',
+    },
+  },
+  deckcraft: {
+    color: '#ef6c1a',
+    drawer: 'slides',
+    tagline: { ko: '프레젠테이션과 슬라이드 쇼', en: 'Presentations and slide shows' },
+  },
+  pdfcraft: {
+    color: '#c8102e',
+    drawer: 'pdf',
+    tagline: { ko: 'PDF 읽기·편집·정리·보호', en: 'Read, edit, organize and protect PDFs' },
+  },
+  imageplus: {
+    color: '#1798c9',
+    drawer: 'media',
+    tagline: { ko: '가볍고 빠른 이미지 뷰어', en: 'Lightweight, fast image viewer' },
+  },
+  keystamp: {
+    color: '#1e40af',
+    drawer: 'media',
+    tagline: { ko: '키캡 이미지와 애니메이션 만들기', en: 'Create keycap images and animations' },
+  },
+};
+
+export const DRAWERS = ['all', 'docs', 'slides', 'pdf', 'media'];
+export const VIEWS = ['installed', 'updates', 'missing'];
+
+const ko = {
+  'nav.drawers': '서랍',
+  'nav.views': '살펴보기',
+  'drawer.all': '모든 앱',
+  'drawer.docs': '문서 작성',
+  'drawer.slides': '발표',
+  'drawer.pdf': 'PDF',
+  'drawer.media': '이미지·도구',
+  'view.installed': '설치된 앱',
+  'view.updates': '업데이트 있음',
+  'view.missing': '아직 없는 앱',
+  'settings.language': '언어',
+  'settings.theme': '테마',
+  'theme.auto': '자동',
+  'theme.light': '밝게',
+  'theme.dark': '어둡게',
+  'greet.morning': '좋은 아침입니다',
+  'greet.afternoon': '좋은 오후입니다',
+  'greet.evening': '좋은 저녁입니다',
+  'greet.night': '늦은 시간까지 수고 많으십니다',
+  'summary.loading': '앱 정보를 불러오는 중…',
+  'summary.text': '{total}개 앱 중 {installed}개 설치됨',
+  'summary.updates': ' · 업데이트 {n}개',
+  'summary.allFresh': ' · 모두 최신',
+  'palette.trigger': '앱 찾기',
+  'palette.title': '빠른 실행',
+  'palette.placeholder': '앱 이름이나 하는 일을 입력하세요',
+  'palette.hint': '↑↓ 이동 · Enter 실행 · Esc 닫기',
+  'palette.none': '맞는 앱이 없습니다',
+  'action.refresh': '새로 고침',
+  'action.updateAll': '모두 업데이트',
+  'action.updateSelf': '업데이트하고 다시 시작',
+  'action.install': '설치',
+  'action.update': '업데이트',
+  'action.open': '열기',
+  'action.notes': '릴리스 노트',
+  'action.details': '자세히',
+  'action.repo': '저장소',
+  'action.releases': '릴리스 페이지',
+  'action.close': '닫기',
+  'action.retry': '다시 시도',
+  'status.current': '최신',
+  'status.update': '업데이트',
+  'status.missing': '미설치',
+  'status.unavailable': '이 컴퓨터용 없음',
+  'status.unknown': '확인 중',
+  'label.installed': '설치됨',
+  'label.latest': '최신',
+  'label.publisher': '만든 이',
+  'label.partner': '외부 앱',
+  'label.file': '받을 파일',
+  'label.size': '크기',
+  'label.checksum': '무결성 검사',
+  'label.checksumYes': 'SHA-256 체크섬으로 확인',
+  'label.checksumNo': '이 릴리스는 체크섬을 제공하지 않음',
+  'label.released': '공개일',
+  'label.location': '설치 위치',
+  'label.unknownVersion': '버전 정보 없음',
+  'phase.download': '내려받는 중 {pct}',
+  'phase.verify': '확인하는 중',
+  'phase.install': '설치하는 중',
+  'phase.done': '완료',
+  'toast.installed': '{name} 설치를 마쳤습니다.',
+  'toast.updated': '{name} 업데이트 완료: {version}',
+  'toast.unchecked': '체크섬이 없어 파일 무결성은 확인하지 못했습니다.',
+  'toast.opened': '{name} 여는 중…',
+  'toast.selfUpdating': '새 버전을 내려받고 있습니다. 설치 프로그램이 열리면 안내에 따라 주세요.',
+  'self.available': '새 버전 Chojema Office {version}을 쓸 수 있습니다. (현재 {current})',
+  'offline.text': 'GitHub에 연결하지 못했습니다. 마지막으로 확인한 정보를 보여 드립니다.',
+  'offline.rate': 'GitHub 요청 한도에 도달했습니다. 잠시 뒤 다시 시도해 주세요.',
+  'empty.filter': '이 서랍에는 보여 드릴 앱이 없습니다.',
+  'error.network': '네트워크에 연결하지 못했습니다.',
+  'error.http': 'GitHub 응답 오류가 발생했습니다.',
+  'error.rate_limited': 'GitHub 요청 한도에 도달했습니다.',
+  'error.no_release': '아직 공개된 릴리스가 없습니다.',
+  'error.no_asset': '이 컴퓨터에 맞는 설치 파일이 없습니다.',
+  'error.checksum': '내려받은 파일의 체크섬이 맞지 않아 설치를 멈췄습니다.',
+  'error.cancelled': '설치를 취소했습니다.',
+  'error.installer_failed': '설치 프로그램이 실패했습니다.',
+  'error.not_installed': '설치된 앱을 찾지 못했습니다.',
+  'error.busy': '이미 진행 중인 작업이 있습니다.',
+  'error.unsupported': '이 시스템에서는 지원하지 않습니다.',
+  'error.unknown_app': '알 수 없는 앱입니다.',
+  'error.io': '파일을 처리하지 못했습니다.',
+  'unsupported.os': '이 시스템에서는 앱 설치를 지원하지 않습니다. 릴리스 페이지에서 직접 내려받아 주세요.',
+  'about.open': '정보와 출처',
+  'about.title': 'Chojema Office 정보',
+  'about.lead': 'Chojema Office 앱을 한곳에서 설치하고, 업데이트하고, 여는 런처입니다.',
+  'about.author': '만든 이: Chulwoo Park',
+  'about.license': 'Apache License 2.0으로 배포합니다.',
+  'about.partners': '외부 앱',
+  'about.partnersText': 'WordCraft, DeckCraft, PdfCraft는 ArtCraft Team이 만든 오픈 소스 앱입니다(MIT 또는 Apache-2.0). Chojema Office는 각 앱의 공식 GitHub 릴리스를 그대로 내려받아 설치하며, 앱 아이콘은 원 저장소의 파일을 수정 없이 사용합니다.',
+  'about.inspired': '앱 목록을 한곳에서 관리하는 런처라는 착상은 ArtCraft Launcher(storytold/craft-launcher, MIT 또는 Apache-2.0)에서 얻었습니다. 코드와 디자인은 새로 작성했습니다.',
+  'about.data': '앱 버전 정보는 GitHub 공개 API에서 가져오며, 그 밖의 정보는 어디에도 보내지 않습니다.',
+  'bytes.mb': '{n} MB',
+};
+
+const en = {
+  'nav.drawers': 'Drawers',
+  'nav.views': 'Browse',
+  'drawer.all': 'All apps',
+  'drawer.docs': 'Writing',
+  'drawer.slides': 'Presenting',
+  'drawer.pdf': 'PDF',
+  'drawer.media': 'Images & tools',
+  'view.installed': 'Installed',
+  'view.updates': 'Updates',
+  'view.missing': 'Not installed',
+  'settings.language': 'Language',
+  'settings.theme': 'Theme',
+  'theme.auto': 'Auto',
+  'theme.light': 'Light',
+  'theme.dark': 'Dark',
+  'greet.morning': 'Good morning',
+  'greet.afternoon': 'Good afternoon',
+  'greet.evening': 'Good evening',
+  'greet.night': 'Working late tonight',
+  'summary.loading': 'Loading app information…',
+  'summary.text': '{installed} of {total} apps installed',
+  'summary.updates': ' · {n} updates',
+  'summary.allFresh': ' · all up to date',
+  'palette.trigger': 'Find an app',
+  'palette.title': 'Quick launch',
+  'palette.placeholder': 'Type an app name or what it does',
+  'palette.hint': '↑↓ move · Enter run · Esc close',
+  'palette.none': 'No matching app',
+  'action.refresh': 'Refresh',
+  'action.updateAll': 'Update all',
+  'action.updateSelf': 'Update and restart',
+  'action.install': 'Install',
+  'action.update': 'Update',
+  'action.open': 'Open',
+  'action.notes': 'Release notes',
+  'action.details': 'Details',
+  'action.repo': 'Repository',
+  'action.releases': 'Releases page',
+  'action.close': 'Close',
+  'action.retry': 'Try again',
+  'status.current': 'Up to date',
+  'status.update': 'Update',
+  'status.missing': 'Not installed',
+  'status.unavailable': 'No build for this PC',
+  'status.unknown': 'Checking',
+  'label.installed': 'Installed',
+  'label.latest': 'Latest',
+  'label.publisher': 'Made by',
+  'label.partner': 'Partner app',
+  'label.file': 'File',
+  'label.size': 'Size',
+  'label.checksum': 'Integrity',
+  'label.checksumYes': 'Checked against the SHA-256 checksum',
+  'label.checksumNo': 'This release publishes no checksum',
+  'label.released': 'Released',
+  'label.location': 'Location',
+  'label.unknownVersion': 'Version unknown',
+  'phase.download': 'Downloading {pct}',
+  'phase.verify': 'Verifying',
+  'phase.install': 'Installing',
+  'phase.done': 'Done',
+  'toast.installed': '{name} is installed.',
+  'toast.updated': '{name} is updated to {version}.',
+  'toast.unchecked': 'The release has no checksum, so the file could not be verified.',
+  'toast.opened': 'Opening {name}…',
+  'toast.selfUpdating': 'Downloading the new version. Follow the installer when it opens.',
+  'self.available': 'Chojema Office {version} is available. You are using {current}.',
+  'offline.text': 'Could not reach GitHub. Showing the last information that was checked.',
+  'offline.rate': 'GitHub request limit reached. Please try again in a while.',
+  'empty.filter': 'No apps to show in this drawer.',
+  'error.network': 'Could not connect to the network.',
+  'error.http': 'GitHub returned an error.',
+  'error.rate_limited': 'GitHub request limit reached.',
+  'error.no_release': 'No release has been published yet.',
+  'error.no_asset': 'There is no installer for this computer.',
+  'error.checksum': 'The download failed its checksum, so it was not installed.',
+  'error.cancelled': 'The installation was cancelled.',
+  'error.installer_failed': 'The installer failed.',
+  'error.not_installed': 'Could not find the installed app.',
+  'error.busy': 'A task is already running.',
+  'error.unsupported': 'Not supported on this system.',
+  'error.unknown_app': 'Unknown app.',
+  'error.io': 'Could not handle the file.',
+  'unsupported.os': 'Installing apps is not supported on this system. Download them from the releases page.',
+  'about.open': 'About & credits',
+  'about.title': 'About Chojema Office',
+  'about.lead': 'A launcher to install, update and open the Chojema Office apps from one place.',
+  'about.author': 'Made by Chulwoo Park',
+  'about.license': 'Distributed under the Apache License 2.0.',
+  'about.partners': 'Partner apps',
+  'about.partnersText': 'WordCraft, DeckCraft and PdfCraft are open-source apps by the ArtCraft Team (MIT or Apache-2.0). Chojema Office downloads and installs their official GitHub releases unchanged, and shows their app icons unmodified from their repositories.',
+  'about.inspired': 'The idea of one launcher for a suite of apps comes from ArtCraft Launcher (storytold/craft-launcher, MIT or Apache-2.0). The code and design here are new.',
+  'about.data': 'App versions come from the public GitHub API; nothing else is sent anywhere.',
+  'bytes.mb': '{n} MB',
+};
+
+const TABLES = { ko, en };
+let current = 'ko';
+
+export function detectLanguage() {
+  const langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'ko'];
+  return langs.some((l) => String(l).toLowerCase().startsWith('ko')) ? 'ko' : 'en';
+}
+
+export function setLanguage(lang) {
+  current = TABLES[lang] ? lang : 'ko';
+  document.documentElement.lang = current;
+}
+
+export function language() {
+  return current;
+}
+
+export function t(key, vars = {}) {
+  const raw = TABLES[current][key] ?? TABLES.ko[key] ?? key;
+  return raw.replace(/\{(\w+)\}/g, (_, k) => (vars[k] ?? `{${k}}`));
+}
+
+export function applyStatic(root = document) {
+  root.querySelectorAll('[data-i18n]').forEach((el) => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  root.querySelectorAll('[data-i18n-aria]').forEach((el) => {
+    el.setAttribute('aria-label', t(el.dataset.i18nAria));
+  });
+}
