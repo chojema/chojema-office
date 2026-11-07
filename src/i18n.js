@@ -54,7 +54,7 @@ const ko = {
   'drawer.docs': '문서 작성',
   'drawer.slides': '발표',
   'drawer.pdf': 'PDF',
-  'drawer.media': '이미지·도구',
+  'drawer.media': '이미지 도구',
   'view.installed': '설치된 앱',
   'view.updates': '업데이트 있음',
   'view.missing': '아직 없는 앱',

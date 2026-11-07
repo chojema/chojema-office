@@ -22,7 +22,6 @@
   <a href="https://github.com/chojema/chojema-office/releases/latest"><b>내려받기</b></a> ·
   <a href="#포함된-앱">포함된 앱</a> ·
   <a href="#기능">기능</a> ·
-  <a href="#버전-관리">버전 관리</a> ·
   <a href="#소스에서-빌드">빌드</a>
 </p>
 
@@ -40,12 +39,12 @@
 | 서랍 | 앱 | 하는 일 | 만든 이 |
 |---|---|---|---|
 | 문서 작성 | [Chojema Dooroo](https://github.com/chojema/ChojemaDooroo) | HWP·HWPX 문서를 위한 데스크톱 워드 프로세서 | Chulwoo Park |
-| 문서 작성 | [WordCraft](https://github.com/storytold/wordcraft) | DOCX 문서 작성과 편집 | ArtCraft Team (외부 앱) |
+| 문서 작성 | [WordCraft](https://github.com/storytold/wordcraft) | DOCX 문서 작성과 편집 | ArtCraft Team(외부 앱) |
 | 문서 작성 | [Chojema Editor](https://github.com/chojema/chojema-editor) | 마크다운·HTML 위지윅 편집을 지원하는 텍스트 편집기 | Chulwoo Park |
-| 발표 | [DeckCraft](https://github.com/storytold/deckcraft) | 프레젠테이션과 슬라이드 쇼 | ArtCraft Team (외부 앱) |
-| PDF | [PdfCraft](https://github.com/storytold/pdfcraft) | PDF 읽기·편집·정리·보호 | ArtCraft Team (외부 앱) |
-| 이미지·도구 | [Chojema Image+](https://github.com/chojema/ChojemaImagePlus) | 가볍고 빠른 이미지 뷰어 | Chulwoo Park |
-| 이미지·도구 | [Chojema KeyStamp](https://github.com/chojema/chojema-keystamp) | 키캡 이미지와 애니메이션 만들기 | Chulwoo Park |
+| 발표 | [DeckCraft](https://github.com/storytold/deckcraft) | 프레젠테이션과 슬라이드 쇼 | ArtCraft Team(외부 앱) |
+| PDF | [PdfCraft](https://github.com/storytold/pdfcraft) | PDF 읽기·편집·정리·보호 | ArtCraft Team(외부 앱) |
+| 이미지 도구 | [Chojema Image+](https://github.com/chojema/ChojemaImagePlus) | 가볍고 빠른 이미지 뷰어 | Chulwoo Park |
+| 이미지 도구 | [Chojema KeyStamp](https://github.com/chojema/chojema-keystamp) | 키캡 이미지와 애니메이션 만들기 | Chulwoo Park |
 
 **외부 앱**은 다른 개발자가 만든 오픈 소스 앱입니다. Chojema Office는 이 앱들을 함께 배포하지 않고,
 사용자가 요청할 때 각 앱의 공식 GitHub 릴리스에서 설치 파일을 그대로 내려받습니다. 자세한 출처는 [ATTRIBUTION.md](ATTRIBUTION.md)에 있습니다.
@@ -56,7 +55,7 @@
   <tr>
     <td width="33%" valign="top">
       <h3>🗂️ 서랍처럼 정리</h3>
-      문서 작성·발표·PDF·이미지 서랍과 설치됨·업데이트·미설치 보기로 앱을 나눠 봅니다. 서류철 모양 카드에 설치 버전과 최신 버전이 나란히 나옵니다.
+      문서 작성·발표·PDF·이미지 도구 서랍과 설치됨·업데이트·미설치 보기로 앱을 나눠 봅니다. 서류철 모양 카드에 설치 버전과 최신 버전이 나란히 나옵니다.
     </td>
     <td width="33%" valign="top">
       <h3>⬇️ 확인하고 설치</h3>
@@ -105,43 +104,6 @@ Chojema Office는 각 앱의 공식 설치 파일을 그대로 실행하므로, 
 | Windows | MSI는 Windows Installer(`msiexec /passive`), NSIS 설치 파일은 무인 설치(`/S`)로 실행합니다. 관리자 권한이 필요한 앱은 Windows가 권한을 묻습니다 |
 | macOS | DMG를 연결해 `.app`을 `/Applications`(쓰기 권한이 없으면 `~/Applications`)에 복사합니다 |
 
-## 버전 관리
-
-[유의적 버전(SemVer)](https://semver.org/lang/ko/) `주.부.수`를 따릅니다.
-
-| 자리 | 올리는 경우 | 예 |
-|---|---|---|
-| 주(MAJOR) | 설정·데이터가 호환되지 않게 바뀔 때 | `1.4.2` → `2.0.0` |
-| 부(MINOR) | 기능 추가, 새 앱 합류 | `0.1.0` → `0.2.0` |
-| 수(PATCH) | 버그 수정, 문구 다듬기 | `0.1.0` → `0.1.1` |
-| 시험판 | 정식 전 확인용 | `0.2.0-beta.1` |
-
-- `1.0.0` 전까지(`0.x`)는 초기 개발 단계로, 부 버전에서도 동작이 달라질 수 있습니다.
-- 버전의 기준은 `src-tauri/Cargo.toml` 한 곳이며, 태그는 `v` + 버전(`v0.1.0`)입니다.
-- 변경 내용은 [CHANGELOG.md](CHANGELOG.md)(한국어)와 [CHANGELOG.en.md](CHANGELOG.en.md)(영어)에 기록하고, 릴리스 노트는 두 파일에서 자동으로 만들어집니다.
-
-### 릴리스 절차
-
-```sh
-npm run version:set -- 0.2.0        # Cargo.toml, package.json 버전 변경
-# CHANGELOG.md, CHANGELOG.en.md에 [0.2.0] 항목 작성
-git commit -am "Release 0.2.0"
-git tag v0.2.0 && git push origin main v0.2.0   # GitHub Actions가 설치 파일을 빌드
-npm run release:publish -- 0.2.0    # 빌드가 끝나면 릴리스 게시(한국어·영어 노트, 체크섬 포함)
-```
-
-GitHub Actions는 Windows 설치 파일만 만듭니다. macOS 빌드는 Mac에서 직접 만들어 같은 릴리스에 추가합니다.
-
-```sh
-# Mac에서
-rustup target add aarch64-apple-darwin x86_64-apple-darwin
-npm ci && npx tauri build --target universal-apple-darwin
-cp "src-tauri/target/universal-apple-darwin/release/bundle/dmg/"*.dmg ChojemaOffice-0.2.0-macos-universal.dmg
-gh release download v0.2.0 -p SHA256SUMS.txt --clobber
-shasum -a 256 ChojemaOffice-0.2.0-macos-universal.dmg >> SHA256SUMS.txt
-gh release upload v0.2.0 ChojemaOffice-0.2.0-macos-universal.dmg SHA256SUMS.txt --clobber
-```
-
 ## 소스에서 빌드
 
 필요한 것: [Rust](https://rustup.rs) 1.80 이상, [Node.js](https://nodejs.org) 20 이상, Windows에서는 WebView2(Windows 11에 기본 포함),
@@ -169,8 +131,7 @@ cd src-tauri && cargo test   # 단위 테스트
 
 ## 라이선스와 출처
 
-Chojema Office는 Chulwoo Park이 만들었으며 [Apache License 2.0](LICENSE)으로 배포합니다.
+Chojema Office는 [Apache License 2.0](LICENSE)으로 배포합니다.
 
 - WordCraft, DeckCraft, PdfCraft는 ArtCraft Team의 앱(MIT 또는 Apache-2.0)이며, 앱 아이콘은 각 저장소의 파일을 수정 없이 사용합니다.
-- 여러 앱을 한 런처로 관리한다는 착상은 [ArtCraft Launcher](https://github.com/storytold/craft-launcher)에서 얻었고, 코드와 디자인은 새로 작성했습니다.
 - 파일별 출처: [ATTRIBUTION.md](ATTRIBUTION.md) · [NOTICE](NOTICE)

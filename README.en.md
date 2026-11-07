@@ -22,7 +22,6 @@
   <a href="https://github.com/chojema/chojema-office/releases/latest"><b>Download</b></a> ·
   <a href="#the-apps">The apps</a> ·
   <a href="#features">Features</a> ·
-  <a href="#versioning">Versioning</a> ·
   <a href="#build-from-source">Build</a>
 </p>
 
@@ -106,43 +105,6 @@ you installed yourself are found too).
 | Windows | MSI packages through Windows Installer (`msiexec /passive`), NSIS installers unattended (`/S`). Windows asks for permission when an app needs administrator rights |
 | macOS | Mounts the DMG and copies the `.app` to `/Applications` (or `~/Applications` when that is not writable) |
 
-## Versioning
-
-Chojema Office follows [Semantic Versioning](https://semver.org/), `MAJOR.MINOR.PATCH`.
-
-| Part | When it goes up | Example |
-|---|---|---|
-| MAJOR | Settings or data change incompatibly | `1.4.2` → `2.0.0` |
-| MINOR | New features or a new app joins | `0.1.0` → `0.2.0` |
-| PATCH | Bug fixes and wording | `0.1.0` → `0.1.1` |
-| Pre-release | Testing before a release | `0.2.0-beta.1` |
-
-- Before `1.0.0` (`0.x`) the project is in early development and a minor version may change behavior.
-- The version lives in one place, `src-tauri/Cargo.toml`; tags are `v` plus the version (`v0.1.0`).
-- Changes are recorded in [CHANGELOG.md](CHANGELOG.md) (Korean) and [CHANGELOG.en.md](CHANGELOG.en.md) (English); release notes are generated from both.
-
-### Release steps
-
-```sh
-npm run version:set -- 0.2.0        # updates Cargo.toml and package.json
-# add a [0.2.0] section to CHANGELOG.md and CHANGELOG.en.md
-git commit -am "Release 0.2.0"
-git tag v0.2.0 && git push origin main v0.2.0   # GitHub Actions builds the installers
-npm run release:publish -- 0.2.0    # publishes the release (Korean and English notes, checksums)
-```
-
-GitHub Actions builds the Windows installer only. The macOS build is made by hand on a Mac and added to the same release:
-
-```sh
-# on a Mac
-rustup target add aarch64-apple-darwin x86_64-apple-darwin
-npm ci && npx tauri build --target universal-apple-darwin
-cp "src-tauri/target/universal-apple-darwin/release/bundle/dmg/"*.dmg ChojemaOffice-0.2.0-macos-universal.dmg
-gh release download v0.2.0 -p SHA256SUMS.txt --clobber
-shasum -a 256 ChojemaOffice-0.2.0-macos-universal.dmg >> SHA256SUMS.txt
-gh release upload v0.2.0 ChojemaOffice-0.2.0-macos-universal.dmg SHA256SUMS.txt --clobber
-```
-
 ## Build from source
 
 You need [Rust](https://rustup.rs) 1.80 or newer and [Node.js](https://nodejs.org) 20 or newer; on Windows, WebView2
@@ -170,8 +132,7 @@ Layout:
 
 ## License and credits
 
-Chojema Office is made by Chulwoo Park and licensed under the [Apache License 2.0](LICENSE).
+Chojema Office is licensed under the [Apache License 2.0](LICENSE).
 
 - WordCraft, DeckCraft and PdfCraft are apps by the ArtCraft Team (MIT or Apache-2.0); their app icons are used unmodified from their repositories.
-- The idea of one launcher for a suite of apps comes from [ArtCraft Launcher](https://github.com/storytold/craft-launcher); the code and design here are new.
 - Per-file credits: [ATTRIBUTION.md](ATTRIBUTION.md) · [NOTICE](NOTICE)
