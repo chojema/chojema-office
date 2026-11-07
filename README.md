@@ -36,13 +36,13 @@
 
 ## 포함된 앱
 
-| 서랍 | 앱 | 하는 일 | 만든 이 |
+| 구분 | 이름 | 용도 | 작성 |
 |---|---|---|---|
 | 문서 작성 | [Chojema Dooroo](https://github.com/chojema/ChojemaDooroo) | HWP·HWPX 문서를 위한 데스크톱 워드 프로세서 | Chulwoo Park |
 | 문서 작성 | [WordCraft](https://github.com/storytold/wordcraft) | DOCX 문서 작성과 편집 | ArtCraft Team(외부 앱) |
-| 문서 작성 | [Chojema Editor](https://github.com/chojema/chojema-editor) | 마크다운·HTML 위지윅 편집을 지원하는 텍스트 편집기 | Chulwoo Park |
+| 문서 작성 | [Chojema Editor](https://github.com/chojema/chojema-editor) | 마크다운, HTML 등의 위지윅 편집을 지원하는 텍스트 편집기 | Chulwoo Park |
 | 스프레드시트 | [GridCraft](https://github.com/storytold/gridcraft) | XLSX 스프레드시트 작성과 계산 | ArtCraft Team(외부 앱) |
-| 발표 | [DeckCraft](https://github.com/storytold/deckcraft) | 프레젠테이션과 슬라이드 쇼 | ArtCraft Team(외부 앱) |
+| 발표 | [DeckCraft](https://github.com/storytold/deckcraft) | PPTX 프레젠테이션과 슬라이드 쇼 | ArtCraft Team(외부 앱) |
 | PDF | [PdfCraft](https://github.com/storytold/pdfcraft) | PDF 읽기·편집·정리·보호 | ArtCraft Team(외부 앱) |
 | 이미지 도구 | [Chojema Image+](https://github.com/chojema/ChojemaImagePlus) | 가볍고 빠른 이미지 뷰어 | Chulwoo Park |
 | 이미지 도구 | [Chojema KeyStamp](https://github.com/chojema/chojema-keystamp) | 키캡 이미지와 애니메이션 만들기 | Chulwoo Park |

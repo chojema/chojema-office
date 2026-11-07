@@ -36,13 +36,13 @@ ones you have and which version, installs the right build for your computer, and
 
 ## The apps
 
-| Drawer | App | What it does | Made by |
+| Category | Name | Purpose | Author |
 |---|---|---|---|
 | Writing | [Chojema Dooroo](https://github.com/chojema/ChojemaDooroo) | Desktop word processor for HWP and HWPX documents | Chulwoo Park |
 | Writing | [WordCraft](https://github.com/storytold/wordcraft) | Word processing for DOCX documents | ArtCraft Team (partner app) |
-| Writing | [Chojema Editor](https://github.com/chojema/chojema-editor) | Text editor with WYSIWYG Markdown and HTML editing | Chulwoo Park |
+| Writing | [Chojema Editor](https://github.com/chojema/chojema-editor) | Text editor with WYSIWYG editing for Markdown, HTML and more | Chulwoo Park |
 | Spreadsheets | [GridCraft](https://github.com/storytold/gridcraft) | Spreadsheets for XLSX workbooks | ArtCraft Team (partner app) |
-| Presenting | [DeckCraft](https://github.com/storytold/deckcraft) | Presentations and slide shows | ArtCraft Team (partner app) |
+| Presenting | [DeckCraft](https://github.com/storytold/deckcraft) | PPTX presentations and slide shows | ArtCraft Team (partner app) |
 | PDF | [PdfCraft](https://github.com/storytold/pdfcraft) | Read, edit, organize and protect PDFs | ArtCraft Team (partner app) |
 | Images & tools | [Chojema Image+](https://github.com/chojema/ChojemaImagePlus) | Lightweight, fast image viewer | Chulwoo Park |
 | Images & tools | [Chojema KeyStamp](https://github.com/chojema/chojema-keystamp) | Create keycap images and animations | Chulwoo Park |
