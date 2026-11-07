@@ -1163,41 +1163,6 @@ dialog::backdrop {
   transform: translate(1px, -1px);
 }
 
-.about-maker {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-bottom: 12px;
-}
-
-.about-monogram {
-  display: grid;
-  flex: none;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--accent-ink);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.about-maker div {
-  display: grid;
-  gap: 1px;
-}
-
-.about-maker strong {
-  font-size: 14px;
-}
-
-.about-maker div span {
-  color: var(--muted);
-  font-size: 12px;
-}
-
 .about-chips {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1209,7 +1174,7 @@ dialog::backdrop {
   gap: 9px;
   align-items: center;
   width: 100%;
-  padding: 8px 10px;
+  padding: 9px 12px;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: transparent;
@@ -1226,21 +1191,10 @@ dialog::backdrop {
 }
 
 .about-chip span {
-  display: grid;
-  min-width: 0;
-}
-
-.about-chip strong {
+  overflow: hidden;
   color: var(--ink);
   font-size: 12.5px;
   font-weight: 600;
-}
-
-.about-chip em {
-  overflow: hidden;
-  color: var(--muted);
-  font-size: 11px;
-  font-style: normal;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

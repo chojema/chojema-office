@@ -530,17 +530,17 @@ const ABOUT_ICONS = {
 };
 
 const PROJECT_LINKS = [
-  { icon: 'repo', title: 'about.repo', sub: 'github.com/chojema/chojema-office', url: 'https://github.com/chojema/chojema-office' },
+  { icon: 'repo', title: 'about.repo', sub: 'about.repoText', url: 'https://github.com/chojema/chojema-office' },
   { icon: 'park', title: 'about.appPark', sub: 'about.appParkText', url: 'https://chojema.github.io/AppPark/' },
 ];
 
 const MAKER_LINKS = [
-  { icon: 'blog', label: 'link.blog', handle: 'cantips.com', url: 'https://cantips.com' },
-  { icon: 'youtube', label: 'link.youtube', handle: '@cantips', url: 'https://www.youtube.com/@cantips' },
-  { icon: 'x', label: 'link.x', handle: '@chojema', url: 'https://twitter.com/chojema' },
-  { icon: 'instagram', label: 'link.instagram', handle: '@chojema', url: 'https://www.instagram.com/chojema' },
-  { icon: 'repo', label: 'link.github', handle: 'chojema', url: 'https://github.com/chojema' },
-  { icon: 'home', label: 'link.home', handle: 'ilovemis.com', url: 'http://ilovemis.com/' },
+  { icon: 'blog', label: 'link.blog', url: 'https://cantips.com' },
+  { icon: 'youtube', label: 'link.youtube', url: 'https://www.youtube.com/@cantips' },
+  { icon: 'x', label: 'link.x', url: 'https://twitter.com/chojema' },
+  { icon: 'instagram', label: 'link.instagram', url: 'https://www.instagram.com/chojema' },
+  { icon: 'repo', label: 'link.github', url: 'https://github.com/chojema' },
+  { icon: 'home', label: 'link.home', url: 'http://ilovemis.com/' },
 ];
 
 const aboutIcon = (name) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ABOUT_ICONS[name]}</svg>`;
@@ -551,15 +551,13 @@ function openAbout() {
     (l) => `
       <li><button type="button" class="about-row" data-url="${esc(l.url)}">
         <span class="about-row-icon">${aboutIcon(l.icon)}</span>
-        <span class="about-row-text"><strong>${esc(t(l.title))}</strong><span>${esc(l.sub.startsWith('about.') ? t(l.sub) : l.sub)}</span></span>
+        <span class="about-row-text"><strong>${esc(t(l.title))}</strong><span>${esc(t(l.sub))}</span></span>
         <span class="about-row-go">${aboutIcon('external')}</span>
       </button></li>`,
   ).join('');
   const makerLinks = MAKER_LINKS.map(
     (l) => `
-      <li><button type="button" class="about-chip" data-url="${esc(l.url)}" title="${esc(l.url)}">
-        ${aboutIcon(l.icon)}<span><strong>${esc(t(l.label))}</strong><em>${esc(l.handle)}</em></span>
-      </button></li>`,
+      <li><button type="button" class="about-chip" data-url="${esc(l.url)}">${aboutIcon(l.icon)}<span>${esc(t(l.label))}</span></button></li>`,
   ).join('');
 
   $('#about-body').innerHTML = `
@@ -578,11 +576,7 @@ function openAbout() {
     </section>
 
     <section class="about-section">
-      <h3>${esc(t('about.maker'))}</h3>
-      <div class="about-maker">
-        <span class="about-monogram" aria-hidden="true">CP</span>
-        <div><strong>Chulwoo Park</strong><span>${esc(t('about.makerText'))}</span></div>
-      </div>
+      <h3>${esc(t('about.channels'))}</h3>
       <ul class="about-chips">${makerLinks}</ul>
     </section>
 
