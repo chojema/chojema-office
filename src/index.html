@@ -105,9 +105,12 @@
     </div>
   </div>
 
-  <dialog id="about">
-    <div id="about-body"></div>
-    <form method="dialog"><button class="btn primary" data-i18n="action.close"></button></form>
+  <dialog id="about" aria-labelledby="about-title">
+    <div class="about-scroll" tabindex="-1"><div id="about-body"></div></div>
+    <form method="dialog" class="about-foot">
+      <span id="about-copy"></span>
+      <button class="btn primary" data-i18n="action.close"></button>
+    </form>
   </dialog>
 
   <div class="toasts" id="toasts" aria-live="polite"></div>

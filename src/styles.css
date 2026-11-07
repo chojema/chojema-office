@@ -989,101 +989,317 @@ kbd {
 /* ------------------------------------------------------------ about */
 
 dialog {
-  width: min(520px, 92vw);
+  width: min(540px, 92vw);
+  max-height: min(720px, 90vh);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 18px;
   background: var(--surface);
   color: var(--ink);
-  padding: 24px 26px 20px;
+  padding: 0;
   box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.5);
   user-select: text;
+  overflow: hidden;
 }
 
-dialog {
-  max-height: 88vh;
-  overflow: auto;
+dialog[open] {
+  display: flex;
+  flex-direction: column;
 }
 
-.link-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin: 8px 0 4px;
+dialog::backdrop {
+  background: rgba(10, 20, 22, 0.4);
+  backdrop-filter: blur(2px);
 }
 
-.link-grid.wide {
-  grid-template-columns: repeat(2, 1fr);
+.about-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 26px 28px 8px;
+  outline: none;
 }
 
-.link-tile {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-  padding: 9px 11px;
+.about-hero {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.about-hero img {
+  flex: none;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.about-hero h2 {
+  margin: 2px 0 4px;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+}
+
+.about-hero p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.about-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.about-meta span {
+  font: inherit;
+  padding: 2px 9px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 11.5px;
+  line-height: 18px;
+}
+
+.about-meta .mono {
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+.about-section {
+  padding: 18px 0 0;
+}
+
+.about-section h3 {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.about-rows,
+.about-chips {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about-rows {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.about-rows li + li {
+  border-top: 1px solid var(--line);
+}
+
+.about-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  padding: 11px 14px;
+  border: 0;
   background: transparent;
   color: var(--ink);
   text-align: left;
   cursor: pointer;
 }
 
-.link-tile:hover {
-  border-color: var(--accent);
+.about-row:hover {
+  background: var(--surface-2);
+}
+
+.about-row-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
   background: var(--accent-soft);
+  color: var(--accent);
 }
 
-.link-tile strong {
-  font-size: 13px;
+.about-row-text {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  gap: 1px;
 }
 
-.link-tile span {
+.about-row-text strong {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.about-row-text span {
   overflow: hidden;
   color: var(--muted);
-  font-size: 11.5px;
+  font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-dialog::backdrop {
-  background: rgba(10, 20, 22, 0.35);
+.about-row-go {
+  color: var(--muted);
+  opacity: 0.6;
+  transition: opacity 0.15s, transform 0.15s;
 }
 
-dialog h2 {
-  margin: 0;
-  font-size: 19px;
+.about-row-go svg {
+  width: 15px;
+  height: 15px;
 }
 
-dialog h3 {
-  margin: 16px 0 4px;
+.about-row:hover .about-row-go {
+  color: var(--accent);
+  opacity: 1;
+  transform: translate(1px, -1px);
+}
+
+.about-maker {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.about-monogram {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.about-maker div {
+  display: grid;
+  gap: 1px;
+}
+
+.about-maker strong {
   font-size: 14px;
 }
 
-dialog p {
-  margin: 8px 0;
-  color: var(--ink-2);
-}
-
-dialog .muted {
+.about-maker div span {
   color: var(--muted);
-  font-size: 12.5px;
+  font-size: 12px;
 }
 
-dialog form {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 12px;
+.about-chips {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
 }
 
-.about-head {
+.about-chip {
   display: flex;
-  gap: 14px;
+  gap: 9px;
   align-items: center;
-  margin-bottom: 8px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink-2);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
 }
 
-.about-head p {
-  margin: 2px 0 0;
+.about-chip svg {
+  flex: none;
+  width: 17px;
+  height: 17px;
+}
+
+.about-chip span {
+  display: grid;
+  min-width: 0;
+}
+
+.about-chip strong {
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.about-chip em {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11px;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.about-chip:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line));
+  background: var(--surface-2);
+  color: var(--accent);
+}
+
+.about-row:focus-visible,
+.about-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.about-fine p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.about-privacy {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 9px 11px;
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+
+.about-privacy svg {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin-top: 2px;
+}
+
+.about-foot {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  padding: 14px 28px;
+  border-top: 1px solid var(--line);
+  background: var(--surface-2);
+}
+
+.about-foot span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (max-width: 560px) {
+  .about-chips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* ------------------------------------------------------------ toasts */

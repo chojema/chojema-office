@@ -517,41 +517,86 @@ function runPalette(id) {
 
 // ---------------------------------------------------------------- about
 
-const MAKER_LINKS = [
-  ['link.blog', 'https://cantips.com', 'cantips.com'],
-  ['link.youtube', 'https://www.youtube.com/@cantips', '@cantips'],
-  ['link.x', 'https://twitter.com/chojema', '@chojema'],
-  ['link.instagram', 'https://www.instagram.com/chojema', '@chojema'],
-  ['link.github', 'https://github.com/chojema', 'chojema'],
-  ['link.home', 'http://ilovemis.com/', 'ilovemis.com'],
+const ABOUT_ICONS = {
+  repo: '<path d="M8 18c-3 1-3-1.5-4.5-2M15 21v-3.4a3 3 0 0 0-.8-2.3c2.7-.3 5.5-1.3 5.5-6a4.7 4.7 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6 0C7 2.6 6 2.9 6 2.9a4.3 4.3 0 0 0-.1 3.2A4.7 4.7 0 0 0 4.6 9.3c0 4.6 2.8 5.7 5.5 6a3 3 0 0 0-.8 2.3V21"/>',
+  park: '<rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/>',
+  blog: '<path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
+  youtube: '<rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="m10 9.2 5 2.8-5 2.8z"/>',
+  x: '<path d="M4.5 4.5h4L19.5 19.5h-4z"/><path d="m19.2 4.8-6.4 7M4.8 19.2l6.4-7"/>',
+  instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.8"/><path d="M17 7h.01"/>',
+  home: '<path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5M10 20v-5.5h4V20"/>',
+  external: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  lock: '<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
+};
+
+const PROJECT_LINKS = [
+  { icon: 'repo', title: 'about.repo', sub: 'github.com/chojema/chojema-office', url: 'https://github.com/chojema/chojema-office' },
+  { icon: 'park', title: 'about.appPark', sub: 'about.appParkText', url: 'https://chojema.github.io/AppPark/' },
 ];
 
-function linkTile(label, url, sub) {
-  return `<button type="button" class="link-tile" data-url="${esc(url)}"><strong>${esc(label)}</strong><span>${esc(sub)}</span></button>`;
-}
+const MAKER_LINKS = [
+  { icon: 'blog', label: 'link.blog', handle: 'cantips.com', url: 'https://cantips.com' },
+  { icon: 'youtube', label: 'link.youtube', handle: '@cantips', url: 'https://www.youtube.com/@cantips' },
+  { icon: 'x', label: 'link.x', handle: '@chojema', url: 'https://twitter.com/chojema' },
+  { icon: 'instagram', label: 'link.instagram', handle: '@chojema', url: 'https://www.instagram.com/chojema' },
+  { icon: 'repo', label: 'link.github', handle: 'chojema', url: 'https://github.com/chojema' },
+  { icon: 'home', label: 'link.home', handle: 'ilovemis.com', url: 'http://ilovemis.com/' },
+];
+
+const aboutIcon = (name) => `<svg viewBox="0 0 24 24" aria-hidden="true">${ABOUT_ICONS[name]}</svg>`;
 
 function openAbout() {
+  const version = state.env?.version ?? '';
+  const projectRows = PROJECT_LINKS.map(
+    (l) => `
+      <li><button type="button" class="about-row" data-url="${esc(l.url)}">
+        <span class="about-row-icon">${aboutIcon(l.icon)}</span>
+        <span class="about-row-text"><strong>${esc(t(l.title))}</strong><span>${esc(l.sub.startsWith('about.') ? t(l.sub) : l.sub)}</span></span>
+        <span class="about-row-go">${aboutIcon('external')}</span>
+      </button></li>`,
+  ).join('');
+  const makerLinks = MAKER_LINKS.map(
+    (l) => `
+      <li><button type="button" class="about-chip" data-url="${esc(l.url)}" title="${esc(l.url)}">
+        ${aboutIcon(l.icon)}<span><strong>${esc(t(l.label))}</strong><em>${esc(l.handle)}</em></span>
+      </button></li>`,
+  ).join('');
+
   $('#about-body').innerHTML = `
-    <div class="about-head">
-      <img src="favicon.png" alt="" width="56" height="56">
-      <div><h2>${esc(t('about.title'))}</h2><p class="mono">v${esc(state.env?.version ?? '')}</p></div>
-    </div>
-    <p>${esc(t('about.lead'))}</p>
-    <p><strong>${esc(t('about.author'))}</strong><br>${esc(t('about.license'))}</p>
-    <h3>${esc(t('about.links'))}</h3>
-    <div class="link-grid wide">
-      ${linkTile(t('about.repo'), 'https://github.com/chojema/chojema-office', 'github.com/chojema/chojema-office')}
-      ${linkTile(t('about.appPark'), 'https://chojema.github.io/AppPark/', t('about.appParkText'))}
-    </div>
-    <h3>${esc(t('about.maker'))} · Chulwoo Park</h3>
-    <div class="link-grid">
-      ${MAKER_LINKS.map(([key, url, sub]) => linkTile(t(key), url, sub)).join('')}
-    </div>
-    <h3>${esc(t('about.partners'))}</h3>
-    <p>${esc(t('about.partnersText'))}</p>
-    <p class="muted">${esc(t('about.inspired'))}</p>
-    <p class="muted">${esc(t('about.data'))}</p>`;
-  $('#about').showModal();
+    <header class="about-hero">
+      <img src="favicon.png" alt="" width="60" height="60">
+      <div>
+        <h2 id="about-title">Chojema Office</h2>
+        <p>${esc(t('about.lead'))}</p>
+        <div class="about-meta"><span class="mono">v${esc(version)}</span><span>Apache License 2.0</span></div>
+      </div>
+    </header>
+
+    <section class="about-section">
+      <h3>${esc(t('about.project'))}</h3>
+      <ul class="about-rows">${projectRows}</ul>
+    </section>
+
+    <section class="about-section">
+      <h3>${esc(t('about.maker'))}</h3>
+      <div class="about-maker">
+        <span class="about-monogram" aria-hidden="true">CP</span>
+        <div><strong>Chulwoo Park</strong><span>${esc(t('about.makerText'))}</span></div>
+      </div>
+      <ul class="about-chips">${makerLinks}</ul>
+    </section>
+
+    <section class="about-section about-fine">
+      <h3>${esc(t('about.credits'))}</h3>
+      <p>${esc(t('about.partnersText'))}</p>
+      <p>${esc(t('about.inspired'))}</p>
+      <p class="about-privacy">${aboutIcon('lock')}<span>${esc(t('about.data'))}</span></p>
+    </section>`;
+  $('#about-copy').textContent = '© 2026 Chulwoo Park';
+  const dialog = $('#about');
+  dialog.showModal();
+  dialog.querySelector('.about-scroll').scrollTop = 0;
+  dialog.querySelector('.about-scroll').focus({ preventScroll: true });
 }
 
 // ---------------------------------------------------------------- settings
