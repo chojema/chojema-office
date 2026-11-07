@@ -16,6 +16,7 @@ pub enum Maker {
 
 /// How to find an installed copy on Windows.
 #[derive(Clone, Copy, Debug)]
+#[cfg_attr(not(windows), allow(dead_code))]
 pub struct WinProbe {
     /// Exact `DisplayName` values (or prefixes followed by a space and a version) in the
     /// Uninstall registry keys.
@@ -38,6 +39,7 @@ pub struct AppEntry {
     /// Who publishes it, as shown on the card.
     pub publisher: &'static str,
     pub maker: Maker,
+    #[cfg_attr(not(windows), allow(dead_code))]
     pub windows: WinProbe,
     /// `.app` bundle names to look for in `/Applications` and `~/Applications`.
     #[cfg_attr(not(target_os = "macos"), allow(dead_code))]

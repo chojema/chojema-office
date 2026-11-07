@@ -19,6 +19,7 @@ pub enum Error {
     #[error("checksum mismatch")]
     Checksum,
     #[error("the installer was cancelled")]
+    #[cfg_attr(not(windows), allow(dead_code))]
     Cancelled,
     #[error("the installer failed (exit code {0})")]
     InstallerFailed(i32),
