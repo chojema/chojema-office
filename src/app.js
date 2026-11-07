@@ -244,7 +244,7 @@ function renderHeader() {
     const updates = countFor('updates');
     $('#summary').textContent =
       t('summary.text', { total, installed }) +
-      (updates ? t('summary.updates', { n: updates }) : installed ? t('summary.allFresh') : '');
+      (updates ? t(updates === 1 ? 'summary.update1' : 'summary.updates', { n: updates }) : installed ? t('summary.allFresh') : '');
   }
   const updates = apps().filter((a) => statusOf(a.id) === 'update' && !state.tasks[a.id]);
   $('#update-all').hidden = updates.length < 1 || !state.env?.can_install;

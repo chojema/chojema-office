@@ -76,6 +76,8 @@ downloads each app's official installer, unchanged, from that app's GitHub relea
 
 - Interface in Korean (default) and English. It follows the system language; switch it at the bottom left.
 - Theme: Auto (follows the system), Light or Dark.
+- Open at sign-in: a switch at the bottom left (off by default).
+- About & links: the GitHub repository, Chojema App Park, and channels (blog, YouTube, X, Instagram, GitHub, homepage).
 - App versions come from the public GitHub API, with an ETag cache to stay under the rate limit; offline, the last
   known information is shown. If you hit the limit, set `CHOJEMA_OFFICE_GITHUB_TOKEN` to a GitHub token.
 - When a new Chojema Office is out, a banner offers to download and install it.

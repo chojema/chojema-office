@@ -23,14 +23,14 @@ export const APP_META = {
     color: '#5b4bdb',
     drawer: 'docs',
     tagline: {
-      ko: '마크다운·HTML 위지윅 편집을 지원하는 텍스트 편집기',
-      en: 'Text editor with WYSIWYG Markdown and HTML editing',
+      ko: '마크다운, HTML 등의 위지윅 편집을 지원하는 텍스트 편집기',
+      en: 'Text editor with WYSIWYG editing for Markdown, HTML and more',
     },
   },
   deckcraft: {
     color: '#ef6c1a',
     drawer: 'slides',
-    tagline: { ko: '프레젠테이션과 슬라이드 쇼', en: 'Presentations and slide shows' },
+    tagline: { ko: 'PPTX 프레젠테이션과 슬라이드 쇼', en: 'PPTX presentations and slide shows' },
   },
   pdfcraft: {
     color: '#c8102e',
@@ -79,6 +79,7 @@ const ko = {
   'summary.loading': '앱 정보를 불러오는 중…',
   'summary.text': '{total}개 앱 중 {installed}개 설치됨',
   'summary.updates': ' · 업데이트 {n}개',
+  'summary.update1': ' · 업데이트 1개',
   'summary.allFresh': ' · 모두 최신',
   'palette.trigger': '앱 찾기',
   'palette.title': '빠른 실행',
@@ -189,6 +190,7 @@ const en = {
   'summary.loading': 'Loading app information…',
   'summary.text': '{installed} of {total} apps installed',
   'summary.updates': ' · {n} updates',
+  'summary.update1': ' · 1 update',
   'summary.allFresh': ' · all up to date',
   'palette.trigger': 'Find an app',
   'palette.title': 'Quick launch',

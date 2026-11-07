@@ -5,10 +5,21 @@ versions follow [Semantic Versioning](https://semver.org/). Korean (primary): [C
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-07
+
 ### Added
 
 - "Open at sign-in" setting (bottom left, off by default; Windows startup apps, macOS login items)
-- The "About & links" dialog links to the GitHub repository, Chojema App Park and the maker's blog, YouTube, X, Instagram, GitHub and homepage
+- The "About & links" dialog links to the GitHub repository, Chojema App Park and channels (blog, YouTube, X, Instagram, GitHub, homepage)
+
+### Changed
+
+- Redesigned the "About & links" dialog (project, channels, partner apps and credits)
+- Refined the Chojema Editor and DeckCraft descriptions
+
+### Fixed
+
+- "1 updates" in the English summary when exactly one update is available
 
 ## [0.1.0] - 2026-11-07
 
@@ -27,5 +38,6 @@ First public release.
 - Korean (default) and English interface; light, dark or system theme
 - Update notice and installer for Chojema Office itself
 
-[Unreleased]: https://github.com/chojema/chojema-office/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/chojema/chojema-office/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/chojema/chojema-office/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/chojema/chojema-office/releases/tag/v0.1.0
