@@ -15,6 +15,10 @@ pub struct Installed {
     pub version: Option<String>,
     /// What to start to open the app (an `.exe` on Windows, an `.app` bundle on macOS).
     pub path: Option<String>,
+    /// Windows registry scope, kept internally so MSI updates retain their installation context.
+    #[serde(skip)]
+    #[cfg_attr(not(windows), allow(dead_code))]
+    pub machine: bool,
 }
 
 /// Whether a registry `DisplayName` belongs to an app: an exact name or the name followed by a
@@ -63,6 +67,7 @@ pub fn find(app: &AppEntry) -> Option<Installed> {
     ];
 
     let mut found: Option<(Option<String>, Option<PathBuf>, Option<PathBuf>)> = None;
+    let mut machine = false;
     'outer: for (hive, flags) in views {
         let Ok(root) = RegKey::predef(hive).open_subkey_with_flags(UNINSTALL, flags) else { continue };
         for name in root.enum_keys().flatten() {
@@ -84,6 +89,7 @@ pub fn find(app: &AppEntry) -> Option<Installed> {
                 .map(|l| PathBuf::from(l.trim().trim_matches('"')))
                 .filter(|p| !p.as_os_str().is_empty());
             found = Some((version, icon_exe, location));
+            machine = hive == HKEY_LOCAL_MACHINE;
             break 'outer;
         }
     }
@@ -117,7 +123,7 @@ pub fn find(app: &AppEntry) -> Option<Installed> {
         None => {
             // Not registered (for example unzipped by hand): still openable if the program is there.
             let exe = app_paths_exe().or_else(folder_exe)?;
-            return Some(Installed { version: None, path: Some(exe.to_string_lossy().into_owned()) });
+            return Some(Installed { version: None, path: Some(exe.to_string_lossy().into_owned()), machine: false });
         }
     };
 
@@ -127,7 +133,7 @@ pub fn find(app: &AppEntry) -> Option<Installed> {
         .or_else(app_paths_exe)
         .or_else(folder_exe);
 
-    Some(Installed { version, path: exe.map(|p| p.to_string_lossy().into_owned()) })
+    Some(Installed { version, path: exe.map(|p| p.to_string_lossy().into_owned()), machine })
 }
 
 #[cfg(target_os = "macos")]
@@ -139,13 +145,21 @@ pub fn find(app: &AppEntry) -> Option<Installed> {
     let bundle = roots.iter().find_map(|r| {
         app.mac_bundles.iter().map(|b| r.join(format!("{b}.app"))).find(|p| p.join("Contents/Info.plist").is_file())
     })?;
-    let version = plist::Value::from_file(bundle.join("Contents/Info.plist")).ok().and_then(|v| {
-        let dict = v.into_dictionary()?;
-        dict.get("CFBundleShortVersionString")
-            .or_else(|| dict.get("CFBundleVersion"))
-            .and_then(|s| s.as_string().map(str::to_string))
-    });
-    Some(Installed { version, path: Some(bundle.to_string_lossy().into_owned()) })
+    from_bundle(&bundle)
+}
+
+#[cfg(target_os = "macos")]
+pub fn from_bundle(bundle: &std::path::Path) -> Option<Installed> {
+    let dict = plist::Value::from_file(bundle.join("Contents/Info.plist")).ok()?.into_dictionary()?;
+    let executable = dict.get("CFBundleExecutable")?.as_string()?;
+    if !bundle.join("Contents/MacOS").join(executable).is_file() {
+        return None;
+    }
+    let version = dict
+        .get("CFBundleShortVersionString")
+        .or_else(|| dict.get("CFBundleVersion"))
+        .and_then(|s| s.as_string().map(str::to_string));
+    Some(Installed { version, path: Some(bundle.to_string_lossy().into_owned()), machine: false })
 }
 
 #[cfg(not(any(windows, target_os = "macos")))]

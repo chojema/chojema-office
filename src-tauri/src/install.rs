@@ -7,6 +7,7 @@ use serde::Serialize;
 use sha2::{Digest, Sha256};
 use tokio::io::AsyncWriteExt;
 
+use crate::detect::Installed;
 use crate::error::{Error, Result};
 use crate::github::{find_checksum, Asset, Release};
 
@@ -28,6 +29,24 @@ pub enum Verified {
     Checksum,
     /// The release publishes no checksum for this file.
     Unchecked,
+}
+
+pub fn verify_installed(installed: Option<Installed>, expected: &str) -> Result<Installed> {
+    let installed = installed.ok_or(Error::InstallUnverified)?;
+    let actual = installed.version.as_deref().and_then(crate::platform::parse_version);
+    let expected = crate::platform::parse_version(expected);
+    let matches = matches!((actual, expected), (Some(a), Some(e)) if a.cmp_precedence(&e).is_ge());
+    if !matches || !installed.path.as_deref().is_some_and(|p| Path::new(p).exists()) {
+        return Err(Error::InstallUnverified);
+    }
+    Ok(installed)
+}
+
+#[cfg(any(windows, test))]
+fn msi_arguments(silent: bool, machine: bool) -> String {
+    format!("{} /norestart{}", if silent { "/passive" } else { "" }, if machine { " ALLUSERS=1" } else { "" })
+        .trim()
+        .to_string()
 }
 
 /// Downloads `asset` into `dir`, reporting progress, and checks it against the release's checksum
@@ -99,7 +118,7 @@ pub async fn download(
 /// Runs an installer and waits for it. `silent` asks for an unattended install; the system still
 /// shows its own permission prompt when the installer needs administrator rights.
 #[cfg(windows)]
-pub async fn run_installer(path: &Path, silent: bool) -> Result<()> {
+pub async fn run_installer(path: &Path, silent: bool, previous: Option<&Installed>) -> Result<()> {
     const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 
     let lower = path.to_string_lossy().to_ascii_lowercase();
@@ -107,7 +126,7 @@ pub async fn run_installer(path: &Path, silent: bool) -> Result<()> {
     // Start-Process goes through ShellExecute, which raises the UAC prompt for installers that
     // need elevation (CreateProcess would just fail with ERROR_ELEVATION_REQUIRED).
     let script = if lower.ends_with(".msi") {
-        let args = if silent { "/passive /norestart" } else { "/norestart" };
+        let args = msi_arguments(silent, previous.is_some_and(|i| i.machine));
         format!(
             "$p = Start-Process -FilePath 'msiexec.exe' -ArgumentList @('/i', '\"{}\"', '{}') -Wait -PassThru; exit $p.ExitCode",
             quoted(&path.to_string_lossy()),
@@ -138,9 +157,11 @@ pub async fn run_installer(path: &Path, silent: bool) -> Result<()> {
 /// Mounts the disk image, copies the app into `/Applications` (or `~/Applications` when that is
 /// not writable) and unmounts it.
 #[cfg(target_os = "macos")]
-pub async fn run_installer(path: &Path, _silent: bool) -> Result<()> {
+pub async fn run_installer(path: &Path, _silent: bool, previous: Option<&Installed>) -> Result<()> {
     let system = PathBuf::from("/Applications");
-    let dest_dir = if is_writable(&system) {
+    let dest_dir = if let Some(parent) = previous.and_then(|i| i.path.as_deref()).and_then(|p| Path::new(p).parent()) {
+        parent.to_path_buf()
+    } else if is_writable(&system) {
         system
     } else {
         let home = std::env::var_os("HOME").map(PathBuf::from).ok_or(Error::Unsupported)?;
@@ -156,8 +177,7 @@ pub async fn run_installer(path: &Path, _silent: bool) -> Result<()> {
 #[cfg(target_os = "macos")]
 async fn copy_app_from_dmg(dmg: &Path, dest: impl FnOnce(&std::ffi::OsStr) -> PathBuf) -> Result<PathBuf> {
     use tokio::process::Command;
-    let mount = std::env::temp_dir().join(format!("chojema-office-{}", std::process::id()));
-    let _ = tokio::fs::create_dir_all(&mount).await;
+    let mount = work_dir(&std::env::temp_dir())?;
     let st = Command::new("hdiutil")
         .arg("attach")
         .arg(dmg)
@@ -166,6 +186,7 @@ async fn copy_app_from_dmg(dmg: &Path, dest: impl FnOnce(&std::ffi::OsStr) -> Pa
         .status()
         .await?;
     if !st.success() {
+        let _ = tokio::fs::remove_dir(&mount).await;
         return Err(Error::InstallerFailed(st.code().unwrap_or(-1)));
     }
     let result = async {
@@ -179,20 +200,70 @@ async fn copy_app_from_dmg(dmg: &Path, dest: impl FnOnce(&std::ffi::OsStr) -> Pa
         }
         let app = app.ok_or(Error::NoAsset)?;
         let dest = dest(app.file_name().ok_or(Error::NoAsset)?);
-        if dest.exists() {
-            let _ = tokio::fs::remove_dir_all(&dest).await;
-        }
-        let st = Command::new("ditto").arg(&app).arg(&dest).status().await?;
-        if st.success() {
-            Ok(dest)
-        } else {
-            Err(Error::InstallerFailed(st.code().unwrap_or(-1)))
-        }
+        replace_app(&app, &dest).await?;
+        Ok(dest)
     }
     .await;
     let _ = Command::new("hdiutil").arg("detach").arg(&mount).arg("-quiet").status().await;
     let _ = tokio::fs::remove_dir(&mount).await;
     result
+}
+
+#[cfg(target_os = "macos")]
+fn work_dir(parent: &Path) -> Result<PathBuf> {
+    use std::sync::atomic::{AtomicU64, Ordering};
+    static NEXT: AtomicU64 = AtomicU64::new(0);
+    loop {
+        let dir =
+            parent.join(format!(".chojema-office-{}-{}", std::process::id(), NEXT.fetch_add(1, Ordering::Relaxed)));
+        match std::fs::create_dir(&dir) {
+            Ok(()) => return Ok(dir),
+            Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => continue,
+            Err(e) => return Err(e.into()),
+        }
+    }
+}
+
+#[cfg(target_os = "macos")]
+async fn replace_app(source: &Path, dest: &Path) -> Result<()> {
+    let work = work_dir(dest.parent().ok_or(Error::Unsupported)?)?;
+    let staged = work.join("new.app");
+    let backup = work.join("previous.app");
+    let result = async {
+        let st = tokio::process::Command::new("ditto").arg(source).arg(&staged).status().await?;
+        if !st.success() {
+            return Err(Error::InstallerFailed(st.code().unwrap_or(-1)));
+        }
+        let expected = crate::detect::from_bundle(source).and_then(|i| i.version).ok_or(Error::InstallUnverified)?;
+        verify_installed(crate::detect::from_bundle(&staged), &expected)?;
+        commit_app(&staged, dest, &backup)
+    }
+    .await;
+    // A failed rollback must retain the backup for manual recovery.
+    if result.is_ok() || !backup.exists() {
+        let _ = tokio::fs::remove_dir_all(&work).await;
+    }
+    result
+}
+
+#[cfg(target_os = "macos")]
+fn commit_app(staged: &Path, dest: &Path, backup: &Path) -> Result<()> {
+    let had_previous = dest.try_exists()?;
+    if had_previous {
+        std::fs::rename(dest, backup)?;
+    }
+    if let Err(e) = std::fs::rename(staged, dest) {
+        if had_previous {
+            std::fs::rename(backup, dest).map_err(|restore| {
+                Error::Io(format!(
+                    "{e}; restoring the old app failed: {restore}; backup retained at {}",
+                    backup.display()
+                ))
+            })?;
+        }
+        return Err(e.into());
+    }
+    Ok(())
 }
 
 /// Prepares Chojema Office's own update: copies the new app next to the running one, then starts a
@@ -215,7 +286,7 @@ pub async fn stage_self_update(dmg: &Path) -> Result<()> {
         && !bundle.starts_with("/Volumes");
 
     if !in_place {
-        run_installer(dmg, true).await?;
+        run_installer(dmg, true, None).await?;
         let name = bundle.file_name().ok_or(Error::Unsupported)?;
         let installed = [
             PathBuf::from("/Applications"),
@@ -277,7 +348,7 @@ fn is_writable(dir: &Path) -> bool {
 }
 
 #[cfg(not(any(windows, target_os = "macos")))]
-pub async fn run_installer(_path: &Path, _silent: bool) -> Result<()> {
+pub async fn run_installer(_path: &Path, _silent: bool, _previous: Option<&Installed>) -> Result<()> {
     Err(Error::Unsupported)
 }
 
@@ -333,5 +404,101 @@ pub fn launch(path: &str) -> Result<()> {
     #[cfg(not(any(windows, target_os = "macos")))]
     {
         Err(Error::Unsupported)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn installed(version: Option<&str>) -> Installed {
+        Installed {
+            version: version.map(str::to_string),
+            path: Some(std::env::current_exe().unwrap().to_string_lossy().into_owned()),
+            machine: false,
+        }
+    }
+
+    #[test]
+    fn verifies_installed_version_and_path_before_success() {
+        assert!(verify_installed(Some(installed(Some("0.20.0"))), "v0.20.0").is_ok());
+        assert!(verify_installed(Some(installed(Some("0.21.0"))), "v0.20.0").is_ok());
+        assert!(verify_installed(Some(installed(Some("0.20.0.0"))), "v0.20.0").is_ok());
+        for version in [None, Some("unknown"), Some("0.19.0"), Some("0.20.0-beta.1")] {
+            assert!(matches!(verify_installed(Some(installed(version)), "v0.20.0"), Err(Error::InstallUnverified)));
+        }
+        assert!(matches!(verify_installed(None, "v0.20.0"), Err(Error::InstallUnverified)));
+        let mut no_path = installed(Some("0.20.0"));
+        no_path.path = None;
+        assert!(verify_installed(Some(no_path), "v0.20.0").is_err());
+        let mut missing = installed(Some("0.20.0"));
+        missing.path = Some(std::env::current_exe().unwrap().join("missing-app.exe").to_string_lossy().into_owned());
+        assert!(verify_installed(Some(missing), "v0.20.0").is_err());
+    }
+
+    #[test]
+    fn msi_updates_retain_machine_scope_in_passive_and_interactive_modes() {
+        for silent in [false, true] {
+            let machine = msi_arguments(silent, true);
+            assert!(machine.split_whitespace().any(|a| a == "ALLUSERS=1"));
+            assert!(!msi_arguments(silent, false).contains("ALLUSERS"));
+            assert_eq!(machine.contains("/passive"), silent);
+            assert!(machine.contains("/norestart"));
+        }
+    }
+
+    #[cfg(target_os = "macos")]
+    fn bundle(path: &Path, version: &str) {
+        std::fs::create_dir_all(path.join("Contents/MacOS")).unwrap();
+        std::fs::write(path.join("Contents/MacOS/test-app"), b"test executable").unwrap();
+        let mut dict = plist::Dictionary::new();
+        dict.insert("CFBundleExecutable".into(), "test-app".into());
+        dict.insert("CFBundleShortVersionString".into(), version.into());
+        plist::Value::Dictionary(dict).to_file_xml(path.join("Contents/Info.plist")).unwrap();
+    }
+
+    #[cfg(target_os = "macos")]
+    #[tokio::test]
+    async fn replaces_only_after_a_complete_bundle_is_ready() {
+        let dir = work_dir(&std::env::temp_dir()).unwrap();
+        let source = dir.join("source.app");
+        let dest = dir.join("existing.app");
+        bundle(&source, "0.20.0");
+        bundle(&dest, "0.19.0");
+        std::fs::write(dest.join("old-only"), b"old").unwrap();
+        replace_app(&source, &dest).await.unwrap();
+        assert_eq!(crate::detect::from_bundle(&dest).unwrap().version.as_deref(), Some("0.20.0"));
+        assert!(!dest.join("old-only").exists());
+        assert_eq!(std::fs::read_dir(&dir).unwrap().count(), 2);
+        std::fs::remove_dir_all(dir).unwrap();
+    }
+
+    #[cfg(target_os = "macos")]
+    #[tokio::test]
+    async fn copy_or_validation_failure_keeps_the_old_app() {
+        let dir = work_dir(&std::env::temp_dir()).unwrap();
+        let dest = dir.join("existing.app");
+        bundle(&dest, "0.19.0");
+        assert!(replace_app(&dir.join("missing.app"), &dest).await.is_err());
+        let invalid = dir.join("invalid.app");
+        bundle(&invalid, "0.20.0");
+        std::fs::remove_file(invalid.join("Contents/MacOS/test-app")).unwrap();
+        assert!(matches!(replace_app(&invalid, &dest).await, Err(Error::InstallUnverified)));
+        assert_eq!(crate::detect::from_bundle(&dest).unwrap().version.as_deref(), Some("0.19.0"));
+        assert_eq!(std::fs::read_dir(&dir).unwrap().count(), 2);
+        std::fs::remove_dir_all(dir).unwrap();
+    }
+
+    #[cfg(target_os = "macos")]
+    #[test]
+    fn failed_swap_restores_the_previous_app() {
+        let dir = work_dir(&std::env::temp_dir()).unwrap();
+        let dest = dir.join("existing.app");
+        bundle(&dest, "0.19.0");
+        let backup = dir.join("backup.app");
+        assert!(commit_app(&dir.join("missing-staged.app"), &dest, &backup).is_err());
+        assert_eq!(crate::detect::from_bundle(&dest).unwrap().version.as_deref(), Some("0.19.0"));
+        assert!(!backup.exists());
+        std::fs::remove_dir_all(dir).unwrap();
     }
 }

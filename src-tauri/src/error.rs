@@ -24,6 +24,8 @@ pub enum Error {
     Cancelled,
     #[error("the installer failed (exit code {0})")]
     InstallerFailed(i32),
+    #[error("the installed app or its expected version could not be verified")]
+    InstallUnverified,
     #[error("not installed")]
     NotInstalled,
     #[error("busy with another task")]
@@ -46,6 +48,7 @@ impl Error {
             Error::Checksum => "checksum",
             Error::Cancelled => "cancelled",
             Error::InstallerFailed(_) => "installer_failed",
+            Error::InstallUnverified => "install_unverified",
             Error::NotInstalled => "not_installed",
             Error::Busy => "busy",
             Error::Unsupported => "unsupported",

@@ -82,7 +82,7 @@ const AUTO_RECHECK_SECS: u64 = 10 * 60;
 #[derive(Serialize)]
 struct InstallOutcome {
     verified: Verified,
-    installed: Option<detect::Installed>,
+    installed: detect::Installed,
 }
 
 fn view(release: Release, platform: Platform) -> ReleaseView {
@@ -262,12 +262,17 @@ async fn install_app(
     let dir = state.downloads.join(entry.id);
     let (path, verified) = install::download(&state.client, &release, &asset, &dir, emit).await?;
     emit("install", 0, 0);
-    let result = install::run_installer(&path, silent.unwrap_or(true)).await;
+    let previous = tauri::async_runtime::spawn_blocking(move || detect::find(entry))
+        .await
+        .map_err(|e| Error::Io(e.to_string()))?;
+    let result = install::run_installer(&path, silent.unwrap_or(true), previous.as_ref()).await;
     let _ = tokio::fs::remove_file(&path).await;
     result?;
+    let installed = tauri::async_runtime::spawn_blocking(move || detect::find(entry))
+        .await
+        .map_err(|e| Error::Io(e.to_string()))?;
+    let installed = install::verify_installed(installed, &release.tag)?;
     emit("done", 0, 0);
-
-    let installed = tauri::async_runtime::spawn_blocking(move || detect::find(entry)).await.ok().flatten();
     Ok(InstallOutcome { verified, installed })
 }
 

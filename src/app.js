@@ -406,9 +406,8 @@ async function install(id, { quiet = false } = {}) {
   try {
     const outcome = await invoke('install_app', { id, silent: true });
     delete state.tasks[id];
-    if (outcome.installed) state.installed[id] = outcome.installed;
-    else await loadInstalled();
-    const version = state.installed[id]?.version || state.releases[id]?.version || '';
+    state.installed[id] = outcome.installed;
+    const version = outcome.installed.version;
     toast(wasInstalled ? t('toast.updated', { name: app.name, version }) : t('toast.installed', { name: app.name }), 'ok');
     if (outcome.verified === 'unchecked' && !quiet) toast(t('toast.unchecked'), 'warn', 6000);
     return true;

@@ -5,6 +5,14 @@
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-11-10
+
+### 고침
+
+- macOS 앱 업데이트는 새 앱을 준비한 뒤 교체하며, 교체에 실패하면 기존 앱을 복구합니다. 기존 설치 위치도 유지합니다
+- Windows MSI 업데이트에서 기존의 모든 사용자용 설치 범위를 유지합니다
+- 설치된 앱과 버전을 확인한 뒤에만 설치·업데이트 완료를 표시합니다
+
 ## [0.2.1] - 2026-11-07
 
 ### 고침
@@ -50,7 +58,8 @@
 - 한국어(기본)와 영어 화면, 밝은 테마·어두운 테마·시스템 설정 따르기
 - Chojema Office 자체 업데이트 알림과 설치
 
-[Unreleased]: https://github.com/chojema/chojema-office/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/chojema/chojema-office/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/chojema/chojema-office/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/chojema/chojema-office/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/chojema/chojema-office/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/chojema/chojema-office/releases/tag/v0.1.0
