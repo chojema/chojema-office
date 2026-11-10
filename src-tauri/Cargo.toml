@@ -1,6 +1,6 @@
 [package]
 name = "chojema-office"
-version = "0.2.2"
+version = "0.2.3"
 description = "Chojema Office: one place to install, update and open the Chojema Office apps"
 authors = ["Chulwoo Park"]
 license = "Apache-2.0"

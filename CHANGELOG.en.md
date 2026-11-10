@@ -5,6 +5,13 @@ versions follow [Semantic Versioning](https://semver.org/). Korean (primary): [C
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-11-10
+
+### Added
+
+- Add the Chojema PDFLock card after PdfCraft for setting PDF open and permissions passwords
+- Chojema PDFLock is available for Windows; its macOS version is marked as coming soon
+
 ## [0.2.2] - 2026-11-10
 
 ### Fixed
@@ -58,7 +65,8 @@ First public release.
 - Korean (default) and English interface; light, dark or system theme
 - Update notice and installer for Chojema Office itself
 
-[Unreleased]: https://github.com/chojema/chojema-office/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/chojema/chojema-office/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/chojema/chojema-office/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/chojema/chojema-office/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/chojema/chojema-office/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/chojema/chojema-office/compare/v0.1.0...v0.2.0

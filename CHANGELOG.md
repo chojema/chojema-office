@@ -5,6 +5,13 @@
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-11-10
+
+### 추가
+
+- PdfCraft 다음에 Chojema PDFLock 카드를 추가합니다(PDF 열기 암호·권한 암호 설정)
+- Chojema PDFLock은 Windows 버전을 제공하며, macOS 버전은 예정으로 안내합니다
+
 ## [0.2.2] - 2026-11-10
 
 ### 고침
@@ -58,7 +65,8 @@
 - 한국어(기본)와 영어 화면, 밝은 테마·어두운 테마·시스템 설정 따르기
 - Chojema Office 자체 업데이트 알림과 설치
 
-[Unreleased]: https://github.com/chojema/chojema-office/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/chojema/chojema-office/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/chojema/chojema-office/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/chojema/chojema-office/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/chojema/chojema-office/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/chojema/chojema-office/compare/v0.1.0...v0.2.0

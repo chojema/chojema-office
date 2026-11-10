@@ -37,6 +37,11 @@ export const APP_META = {
     drawer: 'pdf',
     tagline: { ko: 'PDF 읽기·편집·정리·보호', en: 'Read, edit, organize and protect PDFs' },
   },
+  pdflock: {
+    color: '#2563eb',
+    drawer: 'pdf',
+    tagline: { ko: 'PDF 열기 암호와 권한 암호 설정 · macOS 예정', en: 'Set open and permissions passwords for PDFs · macOS coming soon' },
+  },
   imageplus: {
     color: '#1798c9',
     drawer: 'media',

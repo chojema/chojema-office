@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>문서 작성, 발표, PDF, 이미지 앱을 한 창에서 설치하고, 업데이트하고, 엽니다.</b><br>
-  Chojema Dooroo · WordCraft · GridCraft · DeckCraft · PdfCraft · Chojema Editor · Chojema Image+ · Chojema KeyStamp
+  Chojema Dooroo · WordCraft · GridCraft · DeckCraft · PdfCraft · Chojema PDFLock · Chojema Editor · Chojema Image+ · Chojema KeyStamp
 </p>
 
 <p align="center">
@@ -44,6 +44,7 @@
 | 스프레드시트 | [GridCraft](https://github.com/storytold/gridcraft) | XLSX 스프레드시트 작성과 계산 | ArtCraft Team(외부 앱) |
 | 발표 | [DeckCraft](https://github.com/storytold/deckcraft) | PPTX 프레젠테이션과 슬라이드 쇼 | ArtCraft Team(외부 앱) |
 | PDF | [PdfCraft](https://github.com/storytold/pdfcraft) | PDF 읽기·편집·정리·보호 | ArtCraft Team(외부 앱) |
+| PDF | [Chojema PDFLock](https://github.com/chojema/chojema-pdflock) | PDF 열기 암호와 권한 암호 설정(Windows 제공, macOS 예정) | Chulwoo Park |
 | 이미지 도구 | [Chojema Image+](https://github.com/chojema/ChojemaImagePlus) | 가볍고 빠른 이미지 뷰어 | Chulwoo Park |
 | 이미지 도구 | [Chojema KeyStamp](https://github.com/chojema/chojema-keystamp) | 키캡 이미지와 애니메이션 만들기 | Chulwoo Park |
 

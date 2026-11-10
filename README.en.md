@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>Install, update and open your writing, spreadsheet, presentation, PDF and image apps from one window.</b><br>
-  Chojema Dooroo · WordCraft · GridCraft · DeckCraft · PdfCraft · Chojema Editor · Chojema Image+ · Chojema KeyStamp
+  Chojema Dooroo · WordCraft · GridCraft · DeckCraft · PdfCraft · Chojema PDFLock · Chojema Editor · Chojema Image+ · Chojema KeyStamp
 </p>
 
 <p align="center">
@@ -44,6 +44,7 @@ ones you have and which version, installs the right build for your computer, and
 | Spreadsheets | [GridCraft](https://github.com/storytold/gridcraft) | Spreadsheets for XLSX workbooks | ArtCraft Team (partner app) |
 | Presenting | [DeckCraft](https://github.com/storytold/deckcraft) | PPTX presentations and slide shows | ArtCraft Team (partner app) |
 | PDF | [PdfCraft](https://github.com/storytold/pdfcraft) | Read, edit, organize and protect PDFs | ArtCraft Team (partner app) |
+| PDF | [Chojema PDFLock](https://github.com/chojema/chojema-pdflock) | Set open and permissions passwords for PDFs (Windows available, macOS coming soon) | Chulwoo Park |
 | Images & tools | [Chojema Image+](https://github.com/chojema/ChojemaImagePlus) | Lightweight, fast image viewer | Chulwoo Park |
 | Images & tools | [Chojema KeyStamp](https://github.com/chojema/chojema-keystamp) | Create keycap images and animations | Chulwoo Park |
 

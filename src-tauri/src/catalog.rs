@@ -61,7 +61,7 @@ impl AppEntry {
 }
 
 /// The suite, in display order.
-pub const SUITE: [AppEntry; 8] = [
+pub const SUITE: [AppEntry; 9] = [
     AppEntry {
         id: "dooroo",
         name: "Chojema Dooroo",
@@ -126,6 +126,19 @@ pub const SUITE: [AppEntry; 8] = [
             folders: &["PdfCraft", "ArtCraft\\PdfCraft"],
         },
         mac_bundles: &["PdfCraft"],
+    },
+    AppEntry {
+        id: "pdflock",
+        name: "Chojema PDFLock",
+        repo: "chojema/chojema-pdflock",
+        publisher: "Chulwoo Park",
+        maker: Maker::Chojema,
+        windows: WinProbe {
+            display_names: &["Chojema PDFLock"],
+            exe: "chojema-pdflock.exe",
+            folders: &["Chojema PDFLock"],
+        },
+        mac_bundles: &["Chojema PDFLock"],
     },
     AppEntry {
         id: "editor",
